@@ -1,0 +1,314 @@
+{
+  "festival_schedule": {
+    "day_1": {
+      "date": "30 Oct, Thu",
+      "stages": {
+        "Outdoor Theatre": [
+          {
+            "time": "7pm",
+            "artist": "SHINSEINA"
+          },
+          {
+            "time": "8.20pm",
+            "artist": "rathmock"
+          },
+          {
+            "time": "9.40pm",
+            "artist": "ONE CLICK STRAIGHT (PH)",
+            "note": "in conjunction with The Rest is Noise PH"
+          }
+        ],
+        "Annexe": [
+          {
+            "time": "7.40pm",
+            "artist": "haldi honey"
+          },
+          {
+            "time": "9pm",
+            "artist": "pines"
+          },
+          {
+            "time": "10.30pm",
+            "artist": "LEMONY (TH)",
+            "note": "in conjunction with Big Mountain Festival"
+          }
+        ]
+      }
+    },
+    "day_2": {
+      "date": "31 Oct, Fri",
+      "stages": {
+        "LiveWire": [
+          {
+            "time": "6.40pm",
+            "artist": "Aggressive Raisin Cat"
+          },
+          {
+            "time": "8.20pm",
+            "artist": "Massacre Conspiracy (MY)"
+          },
+          {
+            "time": "10pm",
+            "artist": "Chicosci (PH)"
+          }
+        ],
+        "Powerhouse (Singtel Waterfront)": [
+          {
+            "time": "6.10pm",
+            "artist": "A R A J U A"
+          },
+          {
+            "time": "7.50pm",
+            "artist": "Rub Of Rub (ID)"
+          },
+          {
+            "time": "9.30pm",
+            "artist": "Midnight Fusic (MY)"
+          },
+          {
+            "time": "11.10pm",
+            "artist": "JPBS (TH)"
+          }
+        ],
+        "Outdoor Theatre": [
+          {
+            "time": "7pm",
+            "artist": "Jumat Gombrong (ID)"
+          },
+          {
+            "time": "8.40pm",
+            "artist": "Johny Comes Lately (MY)"
+          },
+          {
+            "time": "10.20pm",
+            "artist": "Ali (ID)"
+          }
+        ],
+        "Annexe": [
+          {
+            "time": "7.30pm",
+            "artist": "完美倒立 The Upside Down (CN)"
+          },
+          {
+            "time": "8.40pm",
+            "artist": "Bellied Star"
+          },
+          {
+            "time": "9.50pm",
+            "artist": "Soumbalgwang (KR)"
+          }
+        ],
+        "Chillout (Concourse)": [
+          {
+            "time": "5pm",
+            "artist": "motifs"
+          },
+          {
+            "time": "6pm",
+            "artist": "A Vacant Affair"
+          },
+          {
+            "time": "7.30pm",
+            "artist": "motifs"
+          },
+          {
+            "time": "9.10pm",
+            "artist": "A Vacant Affair"
+          }
+        ]
+      }
+    },
+    "day_3": {
+      "date": "1 Nov, Sat",
+      "stages": {
+        "LiveWire": [
+          {
+            "time": "6.40pm",
+            "artist": "CÚT LỘN (VN)"
+          },
+          {
+            "time": "8.20pm",
+            "artist": "A Vacant Affair"
+          },
+          {
+            "time": "10pm",
+            "artist": "Alliance of Hate"
+          },
+          {
+            "time": "11.10pm",
+            "artist": "Sekumpulan Orang Gila (MY)"
+          }
+        ],
+        "Powerhouse (Singtel Waterfront)": [
+          {
+            "time": "7.10pm",
+            "artist": "ANECHOIS"
+          },
+          {
+            "time": "8.20pm",
+            "artist": "Alec Orachi (TH)"
+          },
+          {
+            "time": "9.30pm",
+            "artist": "weish"
+          },
+          {
+            "time": "10.40pm",
+            "artist": "paranoid void (JP)"
+          }
+        ],
+        "Outdoor Theatre": [
+          {
+            "time": "6.30pm",
+            "artist": "Sandwich (PH)"
+          },
+          {
+            "time": "7.40pm",
+            "artist": "toconoma (JP)"
+          },
+          {
+            "time": "8.50pm",
+            "artist": "The Adams (ID)"
+          },
+          {
+            "time": "10pm",
+            "artist": "Wicked Aura"
+          }
+        ],
+        "Annexe": [
+          {
+            "time": "6.30pm",
+            "artist": "FORD TRIO (TH)"
+          },
+          {
+            "time": "7.40pm",
+            "artist": "Fayzz (CN)"
+          },
+          {
+            "time": "8.50pm",
+            "artist": "bongjeingan (KR)"
+          }
+        ],
+        "Chillout (Concourse)": [
+          {
+            "time": "5pm",
+            "artist": "Saints Amongst Sinners"
+          },
+          {
+            "time": "6pm",
+            "artist": "Midnight Fusic (MY)"
+          },
+          {
+            "time": "7.30pm",
+            "artist": "Saints Amongst Sinners"
+          },
+          {
+            "time": "9.10pm",
+            "artist": "Midnight Fusic (MY)"
+          }
+        ],
+        "Esplanade Black Room": [
+          {
+            "time": "1.30pm",
+            "event": "Panel Talk - Independent on the Move: Touring Without a Backing"
+          },
+          {
+            "time": "3.30pm",
+            "event": "Panel Talk - Evolving Audiences - The Changing Landscape of Festival Culture"
+          }
+        ]
+      }
+    },
+    "day_4": {
+      "date": "2 Nov, Sun",
+      "stages": {
+        "LiveWire": [
+          {
+            "time": "6.40pm",
+            "artist": "Zygnema (IN)"
+          },
+          {
+            "time": "8.20pm",
+            "artist": "Plainsunset (SG)"
+          },
+          {
+            "time": "10pm",
+            "artist": "Flesh Juicer (TW)"
+          },
+          {
+            "time": "11.10pm",
+            "artist": "Battlesnake (AU)"
+          }
+        ],
+        "Powerhouse (Singtel Waterfront)": [
+          {
+            "time": "7.10pm",
+            "artist": "Blanco Teta (AR)"
+          },
+          {
+            "time": "8.20pm",
+            "artist": "motifs"
+          },
+          {
+            "time": "9.30pm",
+            "artist": "temp. (TH)"
+          },
+          {
+            "time": "10.40pm",
+            "artist": "mouse on the keys (JP)"
+          }
+        ],
+        "Outdoor Theatre": [
+          {
+            "time": "6.30pm",
+            "artist": "Saints Amongst Sinners"
+          },
+          {
+            "time": "7.40pm",
+            "artist": "Carsick Cars (CN)"
+          },
+          {
+            "time": "8.50pm",
+            "artist": "N.Y.P.D. 南洋派对 (HK)"
+          },
+          {
+            "time": "10.10pm",
+            "artist": "Silica Gel (KR)"
+          }
+        ],
+        "Annexe": [
+          {
+            "time": "6.30pm",
+            "artist": "TOFU (TH)"
+          },
+          {
+            "time": "7.40pm",
+            "artist": "Dirgahayu (MY)"
+          },
+          {
+            "time": "8.50pm",
+            "artist": "The Bois"
+          }
+        ],
+        "Chillout (Concourse)": [
+          {
+            "time": "5pm",
+            "artist": "Sekumpulan Orang Gila (MY)"
+          },
+          {
+            "time": "6pm",
+            "artist": "Microchip Terror"
+          },
+          {
+            "time": "7.30pm",
+            "artist": "Sekumpulan Orang Gila (MY)"
+          },
+          {
+            "time": "9.10pm",
+            "artist": "Microchip Terror"
+          }
+        ]
+      }
+    }
+  }
+}
