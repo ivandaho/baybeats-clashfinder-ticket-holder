@@ -46,27 +46,31 @@ function ClashFinder() {
   }
 
   return (
-    <div className="bg-gradient-to-br from-purple-900 via-indigo-900 to-blue-900 w-screen">
-      <h1 className="text-4xl font-bold text-white mb-6">
-        Festival Clashfinder
-      </h1>
-      <div className="flex gap-3 mb-8 text-nowrap overflow-x-auto py-2 px-2">
+    <div className="bg-gradient-to-br rounded-lg from-fuchsia-900 via-fuchsia-800 to-fuchsia-900 sm:p-4">
+      <div className="pl-1">
+        <h1 className="text-4xl font-bold text-white mt-4">Baybeats 2025</h1>
+        <h4 className="text-white text-xs leading-tight mb-6 max-w-screen">
+          Clashfinder + ticket management. click any band slot to upload any
+          ticket. everything runs locally, nothing is uploaded
+        </h4>
+      </div>
+      <div className="flex gap-3 text-nowrap overflow-x-auto py-2 px-2 max-w-screen">
         {Object.keys(festivalData).map((day) => (
           <button
             key={day}
             onClick={() => setSelectedDay(day)}
-            className={`px-6 py-3 rounded-lg font-semibold transition-all ${
+            className={`px-2 py-1 rounded-md font-semibold transition-all text-sm ${
               selectedDay === day
                 ? "bg-white text-purple-900 shadow-lg scale-105"
-                : "bg-purple-800 text-white hover:bg-purple-700"
+                : "text-white hover:bg-purple-700"
             }`}
           >
             {festivalData[day].date}
           </button>
         ))}
       </div>
-      <div className="bg-white/10 backdrop-blur-sm rounded-xl px-2 overflow-visible overflow-x-auto">
-        <div className="flex gap-0 overflow-y-hidden py-4">
+      <div className="bg-white/10 backdrop-blur-sm rounded-xl px-2 overflow-visible overflow-x-auto max-w-[1200px]">
+        <div className="flex gap-0 py-4">
           {/* Time column */}
           <div
             className="relative flex-shrink-0 w-8 mr-4"
@@ -87,7 +91,10 @@ function ClashFinder() {
 
           {/* Stage columns */}
           {stages.map((stage) => (
-            <div key={stage} className="flex-1 min-w-[120px] mx-1">
+            <div
+              key={stage}
+              className="flex-1 min-w-[120px] max-w-[240px] mx-1"
+            >
               <div className="text-white font-bold text-center mb-4 pb-2 border-b-2 border-white/30 text-nowrap truncate">
                 {stage}
               </div>
