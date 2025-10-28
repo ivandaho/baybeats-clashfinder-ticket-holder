@@ -81,8 +81,8 @@ function App() {
       <header className="App-header">
         <h1>PDF Processor</h1>
         <input type="file" multiple accept=".pdf" onChange={handleFileChange} />
-        <ClashFinder />
       </header>
+      <ClashFinder />
     </div>
   );
 }
