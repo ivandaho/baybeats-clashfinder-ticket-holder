@@ -1,20 +1,8 @@
 import { useState } from "react";
 
 import { festival_schedule as festivalData } from "../../schedule.json";
-
-function timeToMinutes(time) {
-  const match = time.match(/(\d+)(?:\.(\d+))?(am|pm)/);
-  if (!match) return 0;
-
-  let hour = parseInt(match[1]);
-  const minute = match[2] ? parseInt(match[2]) : 0;
-  const period = match[3];
-
-  if (period === "pm" && hour !== 12) hour += 12;
-  if (period === "am" && hour === 12) hour = 0;
-
-  return hour * 60 + minute;
-}
+import { BandSetButton } from "./BandSetButton";
+import { timeToMinutes } from "../../utils/clashfinder";
 
 function ClashFinder() {
   const [selectedDay, setSelectedDay] = useState("day_1");
@@ -116,38 +104,14 @@ function ClashFinder() {
                 ))}
 
                 {/* Artist slots */}
-                {dayData.stages[stage].map((slot, idx) => {
-                  const startMinutes = timeToMinutes(slot.time);
-                  const topPosition =
-                    (startMinutes - minTime) * pixelsPerMinute;
-                  const height = 45 * pixelsPerMinute; // 45 min set
-
+                {dayData.stages[stage].map((slot, i) => {
                   return (
-                    <div
-                      key={idx}
-                      className="absolute left-1 right-1 bg-gradient-to-br from-pink-500 to-purple-600 rounded-lg p-2 overflow-hidden hover:scale-105 hover:z-10 transition-transform cursor-pointer shadow-lg"
-                      style={{
-                        top: `${topPosition}px`,
-                        height: `${height}px`,
-                      }}
-                    >
-                      <div className="text-white font-bold text-xs mb-1">
-                        {slot.time}
-                      </div>
-                      <div className="text-white font-semibold text-sm leading-tight">
-                        {slot.artist}
-                      </div>
-                      {slot.note && (
-                        <div className="text-white/80 text-xs italic mt-1 leading-tight">
-                          {slot.note}
-                        </div>
-                      )}
-                      {slot.event && (
-                        <div className="text-white text-xs mt-1 leading-tight">
-                          {slot.event}
-                        </div>
-                      )}
-                    </div>
+                    <BandSetButton
+                      key={i}
+											slot={slot}
+                      minTime={minTime}
+                      pixelsPerMinute={pixelsPerMinute}
+                    />
                   );
                 })}
               </div>
