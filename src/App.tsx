@@ -4,6 +4,7 @@ import { openDB } from "idb";
 import * as pdfjsLib from "pdfjs-dist";
 import workerUrl from "pdfjs-dist/build/pdf.worker.mjs?url";
 import { type BaybeatsStage, type SetMetadata } from "./types/types";
+import ClashFinder from "./components/clashfinder/Clashfinder";
 
 pdfjsLib.GlobalWorkerOptions.workerSrc = workerUrl;
 
@@ -80,6 +81,7 @@ function App() {
       <header className="App-header">
         <h1>PDF Processor</h1>
         <input type="file" multiple accept=".pdf" onChange={handleFileChange} />
+        <ClashFinder />
       </header>
     </div>
   );
@@ -125,10 +127,7 @@ const getTixCount = (numPages: number): number => {
   return Math.floor(numPages / 2);
 };
 
-const storeTicketPdf = async (
-  file: File,
-  bandName: string,
-) => {
+const storeTicketPdf = async (file: File, bandName: string) => {
   try {
     const db = await dbPromise;
     await db.put("pdf-files", file, bandName);
