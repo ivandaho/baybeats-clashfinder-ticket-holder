@@ -1,11 +1,22 @@
-import { useRef, type ChangeEvent } from "react";
-import { timeToMinutes } from "../../utils/clashfinder";
+import { useEffect, useRef, useState, type ChangeEvent } from "react";
+import { isNeedTix, timeToMinutes } from "../../utils/clashfinder";
 import * as pdfjsLib from "pdfjs-dist";
 import workerUrl from "pdfjs-dist/build/pdf.worker.mjs?url";
-import { processPdfData, storeTicketPdf } from "../../utils/pdf";
+import {
+  deleteTicketPdf,
+  getIfPDFExists,
+  getPDFById,
+  processPdfData,
+  storeTicketPdf,
+} from "../../utils/pdf";
 import cx from "classnames";
+import type { BaybeatsStage } from "../../types/types";
 
 pdfjsLib.GlobalWorkerOptions.workerSrc = workerUrl;
+
+const haveTixClass = "from-green-500";
+const noTixClass = "from-pink-500";
+const dontNeedTixClass = "from-blue-400";
 
 type BandSetButtonProps = {
   slot: {
@@ -13,12 +24,15 @@ type BandSetButtonProps = {
     artist: string;
     note: string;
   };
+  stage: BaybeatsStage;
   minTime: number;
   pixelsPerMinute: number;
 };
+
 const BandSetButton = ({
   slot,
   minTime,
+  stage,
   pixelsPerMinute,
 }: BandSetButtonProps) => {
   const { time, artist, note } = slot;
@@ -27,6 +41,7 @@ const BandSetButton = ({
   const height = 45 * pixelsPerMinute; // 45 min set
 
   const inputRef = useRef<HTMLInputElement>(null);
+  const [hasTix, setHasTix] = useState<boolean>(false);
 
   const handleFileChange = async (event: ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
@@ -53,11 +68,6 @@ const BandSetButton = ({
 
             const setMetadata = processPdfData(fullText, pdf.numPages);
             console.log("d: ", setMetadata);
-            const bandName = setMetadata.bandName;
-            localStorage.setItem(
-              `set-${bandName}`,
-              JSON.stringify(setMetadata),
-            );
             storeTicketPdf(file, setMetadata.bandName);
           } catch (error) {
             console.error("Error processing PDF:", error);
@@ -69,23 +79,40 @@ const BandSetButton = ({
     }
   };
 
-  const haveTixClass = "from-green-500";
-  const noTixClass = "from-pink-500";
+  useEffect(() => {
+    const initFn = async () => {
+      console.log("artist: ", artist);
+      setHasTix(await getIfPDFExists(artist));
+    };
+    initFn();
+  }, [artist]);
 
-  const haveTix = () => {
-    const d = localStorage.getItem(`set-${artist}`);
-    return !!d;
+  const openTixBlob = async () => {
+    const d = await getPDFById(artist);
+    const url = URL.createObjectURL(d);
+    window.open(url, "_blank");
+
+    // Clean up after a delay (user should have opened it by then)
+    setTimeout(() => URL.revokeObjectURL(url), 60000);
   };
 
   return (
     <>
       <div
         onClick={() => {
-          inputRef.current?.click();
+          if (hasTix) {
+            openTixBlob();
+          } else {
+            inputRef.current?.click();
+          }
         }}
         className={cx(
-          "absolute left-1 right-1 bg-gradient-to-br to-purple-600 rounded-lg p-2 overflow-hidden hover:scale-105 hover:z-10 transition-transform cursor-pointer shadow-lg",
-          haveTix() ? haveTixClass : noTixClass,
+          "absolute left-1 right-1 bg-gradient-to-br to-purple-600 rounded-lg p-2 overflow-hidden hover:scale-105 hover:z-10 transition-transform cursor-pointer shadow-lg flex flex-col",
+          isNeedTix(stage)
+            ? hasTix
+              ? haveTixClass
+              : noTixClass
+            : dontNeedTixClass,
         )}
         style={{
           top: `${topPosition}px`,
@@ -93,13 +120,24 @@ const BandSetButton = ({
         }}
       >
         <div className="text-white font-bold text-xs mb-1">{time}</div>
-        <div className="text-white font-semibold text-sm leading-tight">
+        <div className="text-white font-semibold text-sm leading-tight grow">
           {artist}
         </div>
         {note && (
           <div className="text-white/80 text-xs italic mt-1 leading-tight">
             {note}
           </div>
+        )}
+        {hasTix && (
+          <button
+            className="bg-red-700 text-white py-1 px-2 self-end text-xs"
+            onClick={(e) => {
+              e.stopPropagation();
+              deleteTicketPdf(artist);
+            }}
+          >
+            remove tickets
+          </button>
         )}
       </div>
       <input

@@ -1,3 +1,5 @@
+import type { BaybeatsStage } from "../types/types";
+
 const timeToMinutes = (time: string) => {
   const match = time.match(/(\d+)(?:\.(\d+))?(am|pm)/);
   if (!match) return 0;
@@ -12,4 +14,15 @@ const timeToMinutes = (time: string) => {
   return hour * 60 + minute;
 };
 
-export { timeToMinutes };
+const isNeedTix = (stage: BaybeatsStage) => {
+  switch (stage) {
+    case "Annexe":
+      return true;
+    case "Powerhouse (Singtel Waterfront)":
+      return true;
+    default:
+      return false;
+  }
+};
+
+export { timeToMinutes, isNeedTix };

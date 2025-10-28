@@ -17,7 +17,6 @@ const bandSetDateTimeRegexp = new RegExp(
   /\d\d-[A-Z]\w\w-\d\d\d\d \d\d:\d\d (AM|PM)/,
 );
 
-
 const processPdfData = (fullText: string, numPages: number): SetMetadata => {
   return {
     bandName: getBandName(fullText),
@@ -46,7 +45,7 @@ const getSetDateTime = (fullText: string): Date => {
 
 const getStageLocation = (fullText: string): BaybeatsStage => {
   if (fullText.indexOf(venueAnnexe)) {
-    return "Anexxe";
+    return "Annexe";
   } else if (fullText.indexOf(venueWaterfront)) {
     return "Powerhouse";
   } else {
@@ -58,14 +57,41 @@ const getTixCount = (numPages: number): number => {
   return Math.floor(numPages / 2);
 };
 
+const countryRegexp = new RegExp(/\(\w\w\)$/);
+const getCleanBandName = (bandName: string) =>
+  bandName.replace(countryRegexp, "").trim().replaceAll(" ", "-");
+
 const storeTicketPdf = async (file: File, bandName: string) => {
+  const cleanedBandName = getCleanBandName(bandName);
   try {
     const db = await dbPromise;
-    await db.put("pdf-files", file, bandName);
-    console.log(`Stored ${bandName} tix in IndexedDB`);
+    await db.put("pdf-files", file, cleanedBandName);
+    console.log(`Stored ${cleanedBandName} tix in IndexedDB`);
   } catch (error) {
-    console.error(`Failed to store ${bandName} tix in IndexedDB`, error);
+    console.error(`Failed to store ${cleanedBandName} tix in IndexedDB`, error);
   }
+};
+
+const deleteTicketPdf = async (id: string) => {
+  try {
+    const db = await dbPromise;
+    await db.delete("pdf-files", getCleanBandName(id));
+    console.log(`deleted ${id} tix in IndexedDB`);
+  } catch (error) {
+    console.error(`Failed to deleted ${id} tix in IndexedDB`, error);
+  }
+};
+
+export const getIfPDFExists = async (id: string) => {
+  const db = await dbPromise;
+  const f = getCleanBandName(id);
+  console.log("f: ", f);
+  return (await db.count("pdf-files", f)) > 0;
+};
+
+export const getPDFById = async (id: string) => {
+  const db = await dbPromise;
+  return await db.get("pdf-files", getCleanBandName(id));
 };
 
 export {
@@ -75,4 +101,5 @@ export {
   getStageLocation,
   getTixCount,
   storeTicketPdf,
+  deleteTicketPdf,
 };

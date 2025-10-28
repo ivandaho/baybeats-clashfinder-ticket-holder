@@ -3,6 +3,7 @@ import { useState } from "react";
 import { festival_schedule as festivalData } from "../../schedule.json";
 import { BandSetButton } from "./BandSetButton";
 import { timeToMinutes } from "../../utils/clashfinder";
+import type { BaybeatsStage } from "../../types/types";
 
 function ClashFinder() {
   const [selectedDay, setSelectedDay] = useState("day_1");
@@ -108,7 +109,8 @@ function ClashFinder() {
                   return (
                     <BandSetButton
                       key={i}
-											slot={slot}
+                      slot={slot}
+                      stage={stage as BaybeatsStage}
                       minTime={minTime}
                       pixelsPerMinute={pixelsPerMinute}
                     />

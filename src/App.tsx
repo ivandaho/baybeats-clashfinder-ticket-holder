@@ -115,7 +115,7 @@ const getSetDateTime = (fullText: string): Date => {
 
 const getStageLocation = (fullText: string): BaybeatsStage => {
   if (fullText.indexOf(venueAnnexe)) {
-    return "Anexxe";
+    return "Annexe";
   } else if (fullText.indexOf(venueWaterfront)) {
     return "Powerhouse";
   } else {

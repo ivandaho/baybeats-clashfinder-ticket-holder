@@ -5,4 +5,7 @@ export type SetMetadata = {
   tixCount: number;
 };
 
-export type BaybeatsStage = "Anexxe" | "Powerhouse" | "Unknown";
+export type BaybeatsStage =
+  | "Annexe"
+  | "Powerhouse (Singtel Waterfront)"
+  | "Unknown";
