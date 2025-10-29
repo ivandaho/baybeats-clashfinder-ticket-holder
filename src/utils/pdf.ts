@@ -97,6 +97,10 @@ export const getPDFById = async (id: string): Promise<Blob> => {
   return await dbPromise.get("pdf-files", getCleanBandName(id));
 };
 
+export const getArtistSetTixCount = (artist: string): number => {
+  return parseInt(localStorage.getItem(getCleanBandName(artist)) || "0");
+};
+
 export const updateTixCountLSForArtist = (
   artist: string,
   changeAmount: number,

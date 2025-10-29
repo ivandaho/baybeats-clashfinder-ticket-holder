@@ -10,6 +10,7 @@ import { addMinutes, isNeedTix, timeToMinutes } from "../../utils/clashfinder";
 import * as pdfjsLib from "pdfjs-dist";
 import workerUrl from "pdfjs-dist/build/pdf.worker.mjs?url";
 import {
+  getArtistSetTixCount,
   getIfPDFExists,
   getPDFById,
   processPdfData,
@@ -19,6 +20,7 @@ import {
 import cx from "classnames";
 import type { BaybeatsSet, BaybeatsStage } from "../../types/types";
 import { TixBadge } from "./TixBadge";
+import { useLongPress } from "@uidotdev/usehooks";
 
 pdfjsLib.GlobalWorkerOptions.workerSrc = workerUrl;
 
@@ -52,7 +54,8 @@ const BandSetButton = ({
   const height = (stage === "Concourse" ? 30 : 40) * pixelsPerMinute; // 45 min set
 
   const inputRef = useRef<HTMLInputElement>(null);
-  const [hasTix, setHasTix] = useState<boolean>(false);
+  const [tixCount, setTixCount] = useState<number>(0);
+  const [isLongPressed, setIsLongPressed] = useState<boolean>(false);
 
   const handleFileChange = async (event: ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
@@ -99,7 +102,13 @@ const BandSetButton = ({
 
   useEffect(() => {
     const initFn = async () => {
-      setHasTix(await getIfPDFExists(artist));
+      const artistSetTixCount = getArtistSetTixCount(artist);
+      // make sure pdf and tix count exists locally
+      const hasPdfAndTixCount =
+        (await getIfPDFExists(artist)) && artistSetTixCount > 0;
+      if (hasPdfAndTixCount) {
+        setTixCount(getArtistSetTixCount(artist));
+      }
     };
     initFn();
   }, [artist, refreshWorkaround]);
@@ -114,20 +123,47 @@ const BandSetButton = ({
   };
 
   const needTix = isNeedTix(stage);
+  const attrs = useLongPress(
+    () => {
+      setIsLongPressed(true);
+    },
+    {
+      onFinish: (e) => {
+        e.preventDefault();
+        setTimeout(() => {
+          setIsLongPressed(false);
+        }, 500);
+      },
+      onCancel: (e) => {
+        e.preventDefault();
+        setTimeout(() => {
+          setIsLongPressed(false);
+        }, 5000);
+      },
+      threshold: 500,
+    },
+  );
 
   return (
     <>
       <div
+        {...attrs}
         onClick={() => {
-          if (hasTix) {
-            openTixBlob();
+          if (tixCount > 0) {
+            if (!isLongPressed) {
+              openTixBlob();
+            }
           } else {
             inputRef.current?.click();
           }
         }}
         className={cx(
           "absolute left-1 right-1 bg-gradient-to-br to-purple-600 rounded-lg px-2 py-1 overflow-hidden hover:scale-105 hover:z-10 transition-transform cursor-pointer shadow-lg flex flex-col min-h-16",
-          needTix ? (hasTix ? haveTixClass : noTixClass) : dontNeedTixClass,
+          needTix
+            ? tixCount > 0
+              ? haveTixClass
+              : noTixClass
+            : dontNeedTixClass,
         )}
         style={{
           top: `${topPosition}px`,
@@ -147,11 +183,12 @@ const BandSetButton = ({
         )}
         {needTix && (
           <TixBadge
+            isLongPressed={isLongPressed}
             setRefreshWorkaround={setRefreshWorkaround}
             setBandSetCount={setBandSetCount}
-            hasTix={hasTix}
+            tixCount={tixCount}
+            setTixCount={setTixCount}
             artist={artist}
-            setHasTix={setHasTix}
           />
         )}
       </div>

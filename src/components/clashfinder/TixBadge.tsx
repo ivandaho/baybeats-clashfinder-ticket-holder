@@ -3,11 +3,12 @@ import { deleteTicketPdf, removeArtistTixInfoFromLS } from "../../utils/pdf";
 import cx from "classnames";
 
 type TixBadgeProps = {
-  hasTix: boolean;
+  tixCount: number;
   artist: string;
-  setHasTix: Dispatch<SetStateAction<boolean>>;
+  setTixCount: Dispatch<SetStateAction<number>>;
   setBandSetCount: Dispatch<SetStateAction<null | number>>;
   setRefreshWorkaround: Dispatch<SetStateAction<number>>;
+  isLongPressed: boolean;
 };
 
 const btnClass = "text-white py-[2px] px-[4px] self-end text-[10px] rounded-sm";
@@ -15,11 +16,12 @@ const btnDangerClass = "bg-rose-700";
 const btnDisabledClass = "bg-gray-400 text-white";
 
 const TixBadge = ({
-  hasTix,
-  setHasTix,
+  tixCount,
+  setTixCount,
   artist,
   setBandSetCount,
   setRefreshWorkaround,
+  isLongPressed,
 }: TixBadgeProps) => {
   const [showConfirm, setShowConfirm] = useState<boolean>(false);
 
@@ -31,13 +33,18 @@ const TixBadge = ({
     if (success) {
       setBandSetCount((c) => (c || 0) - 1);
       removeArtistTixInfoFromLS(artist);
-      setHasTix(false);
+      setTixCount(0);
       setRefreshWorkaround(new Date().getTime());
     }
   };
   return (
-    <div className="absolute bottom-0 right-0 mb-1 mr-1">
-      {hasTix ? (
+    <div
+      className={cx(
+        "absolute bottom-0 right-0 mb-1 mr-1",
+        isLongPressed ? "opacity-0" : "opacity-100",
+      )}
+    >
+      {tixCount > 0 ? (
         showConfirm ? (
           <ConfirmRemove
             setShowConfirm={setShowConfirm}
@@ -51,7 +58,7 @@ const TixBadge = ({
               setShowConfirm(true);
             }}
           >
-            remove
+            remove {tixCount} tix
           </button>
         )
       ) : (
