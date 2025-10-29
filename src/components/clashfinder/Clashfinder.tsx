@@ -27,6 +27,9 @@ function Clashfinder() {
     minTime,
   } = useGetTimeRangeStuff(selectedDay, typedFestivalData);
   const [bandSetCount, setBandSetCount] = useState<null | number>(null);
+  const [hideBanner, setHideBanner] = useState<boolean>(
+    localStorage.getItem("hideBanner") === "hide",
+  );
   const [tixCount, setTixCount] = useState<null | number>(null);
 
   useEffect(() => {
@@ -40,23 +43,36 @@ function Clashfinder() {
     setTixCount(parseInt(localStorage.getItem("tixCount") || "0"));
   }, [refreshWorkaround]);
 
+  const closeBanner = () => {
+    localStorage.setItem("hideBanner", "hide");
+    setHideBanner(true);
+  };
+
   return (
     <div className="bg-gradient-to-br rounded-lg from-fuchsia-900 via-fuchsia-1000 to-fuchsia-1000 sm:p-4 w-screen">
-      <div className="pl-1">
-        <h1 className="text-4xl font-bold text-white mt-4">
-          Baybeats 2025 Clashfinder
-        </h1>
-        <H4>
-          Clashfinder + ticket management. click any band slot to store any
-          ticket on this device. everything runs locally, nothing is uploaded.
-        </H4>
-        <H4>
-          Tickets required only for performances at Powerhouse and Annexe.
-        </H4>
-        <H4>
-          You have uploaded {tixCount} tickets for {bandSetCount} sets.
-        </H4>
-      </div>
+      {hideBanner ? null : (
+        <div className="pl-1">
+          <h1 className="text-4xl font-bold text-white mt-4 flex">
+            Baybeats 2025 Clashfinder
+            <span
+              onClick={closeBanner}
+              className="p-2 text-[8px] h-20 w-20 text-center text-nowrap text-white/30"
+            >
+              close banner
+            </span>
+          </h1>
+          <H4>
+            Clashfinder + ticket management. click any band slot to store any
+            ticket on this device. everything runs locally, nothing is uploaded.
+          </H4>
+          <H4>
+            Tickets required only for performances at Powerhouse and Annexe.
+          </H4>
+          <H4>
+            You have uploaded {tixCount} tickets for {bandSetCount} sets.
+          </H4>
+        </div>
+      )}
       <div className="flex gap-3 text-nowrap py-2 px-2 max-w-screen overflow-x-auto">
         {(Object.keys(typedFestivalData) as BaybeatsDay[]).map((day) => (
           <button
@@ -71,6 +87,17 @@ function Clashfinder() {
             {typedFestivalData[day].date}
           </button>
         ))}
+        {hideBanner ? (
+          <button
+            onClick={() => {
+              localStorage.removeItem("hideBanner");
+              setHideBanner(false);
+            }}
+            className={`px-2 py-1 bg-fuchsia-900 rounded-md font-semibold transition-all text-sm text-white hover:bg-purple-700" `}
+          >
+            info
+          </button>
+        ) : null}
       </div>
       <div className="bg-fuchsia-950 backdrop-blur-sm rounded-xl px-2 max-w-[1200px] overflow-scroll">
         <div className="flex gap-0">
