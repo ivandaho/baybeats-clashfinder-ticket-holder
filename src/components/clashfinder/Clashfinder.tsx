@@ -49,14 +49,14 @@ function Clashfinder() {
   };
 
   return (
-    <div className="bg-gradient-to-br rounded-lg from-fuchsia-900 via-fuchsia-1000 to-fuchsia-1000 sm:p-4 w-screen">
+    <div className="bg-gradient-to-br rounded-lg from-fuchsia-900 via-fuchsia-1000 to-fuchsia-1000 w-screen overflow-scroll h-screen">
       {hideBanner ? null : (
         <div className="pl-1">
           <h1 className="text-4xl font-bold text-white mt-4 flex">
             Baybeats 2025 Clashfinder
             <span
               onClick={closeBanner}
-              className="p-2 text-[8px] h-20 w-20 text-center text-nowrap text-white/30"
+              className="p-2 text-[8px] h-20 w-20 text-center text-nowrap text-white/30 cursor-pointer"
             >
               close banner
             </span>
@@ -99,7 +99,7 @@ function Clashfinder() {
           </button>
         ) : null}
       </div>
-      <div className="bg-fuchsia-950 backdrop-blur-sm rounded-xl px-2 max-w-[1200px] overflow-scroll">
+      <div className="bg-fuchsia-950 backdrop-blur-sm rounded-xl px-2 max-w-[1200px]">
         <div className="flex gap-0">
           {/* Time column */}
           <div className="relative flex-shrink-0 w-8 mr-4 top-12">
