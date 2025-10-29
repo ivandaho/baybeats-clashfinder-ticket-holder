@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { BandSetButton } from "./BandSetButton";
 import type {
   BaybeatsDay,
@@ -10,6 +10,8 @@ import { TimeMarkers } from "./TimeMarkers";
 import { CurrentTime } from "./CurrentTime";
 import { useGetTimeRangeStuff } from "./useGetTimeRangeStuff";
 import { festival_schedule as festivalData } from "../../schedule.json";
+import { H4 } from "./H4";
+import { getStoredPdfCount } from "../../utils/pdf";
 
 const typedFestivalData: BaybeatsFestivalData = festivalData;
 
@@ -25,6 +27,19 @@ function Clashfinder() {
     dayData,
     minTime,
   } = useGetTimeRangeStuff(selectedDay, typedFestivalData);
+  const [bandSetCount, setBandSetCount] = useState<null | number>(null);
+  const [tixCount, setTixCount] = useState<null | number>(null);
+
+  useEffect(() => {
+    const fn = async () => {
+      setBandSetCount(await getStoredPdfCount());
+    };
+    fn();
+  }, []);
+
+  useEffect(() => {
+    setTixCount(parseInt(localStorage.getItem("tixCount") || "0"));
+  }, [refreshWorkaround]);
 
   return (
     <div className="bg-gradient-to-br rounded-lg from-fuchsia-900 via-fuchsia-1000 to-fuchsia-1000 sm:p-4">
@@ -32,14 +47,16 @@ function Clashfinder() {
         <h1 className="text-4xl font-bold text-white mt-4">
           Baybeats 2025 Clashfinder
         </h1>
-        <h4 className="text-white text-xs leading-tight max-w-screen">
+        <H4>
           Clashfinder + ticket management. click any band slot to store any
           ticket on this device. everything runs locally, nothing is uploaded.
-          <br />
-        </h4>
-        <h4 className="text-white text-xs leading-tight mb-6 max-w-screen">
+        </H4>
+        <H4>
           Tickets required only for performances at Powerhouse and Annexe.
-        </h4>
+        </H4>
+        <H4>
+          You have uploaded {tixCount} tickets for {bandSetCount} sets.
+        </H4>
       </div>
       <div className="flex gap-3 text-nowrap py-2 px-2 max-w-screen">
         {(Object.keys(typedFestivalData) as BaybeatsDay[]).map((day) => (
@@ -83,8 +100,9 @@ function Clashfinder() {
                 {dayData.stages[stage]?.map((baybeatsSet, i) => {
                   return (
                     <BandSetButton
-                      setRefreshWorkaround={setRefreshWorkaround}
+                      setBandSetCount={setBandSetCount}
                       refreshWorkaround={refreshWorkaround}
+                      setRefreshWorkaround={setRefreshWorkaround}
                       key={i}
                       baybeatsSet={baybeatsSet}
                       stage={stage as BaybeatsStage}

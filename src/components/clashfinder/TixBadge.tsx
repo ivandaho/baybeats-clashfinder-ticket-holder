@@ -1,18 +1,26 @@
 import { useEffect, useState, type Dispatch, type SetStateAction } from "react";
-import { deleteTicketPdf } from "../../utils/pdf";
+import { deleteTicketPdf, removeArtistTixInfoFromLS } from "../../utils/pdf";
 import cx from "classnames";
 
 type TixBadgeProps = {
   hasTix: boolean;
   artist: string;
   setHasTix: Dispatch<SetStateAction<boolean>>;
+  setBandSetCount: Dispatch<SetStateAction<null | number>>;
+  setRefreshWorkaround: Dispatch<SetStateAction<number>>;
 };
 
-const btnClass = "text-white py-[2px] px-[2px] self-end text-[10px] rounded-sm";
+const btnClass = "text-white py-[2px] px-[4px] self-end text-[10px] rounded-sm";
 const btnDangerClass = "bg-rose-700";
 const btnDisabledClass = "bg-gray-400 text-white";
 
-const TixBadge = ({ hasTix, setHasTix, artist }: TixBadgeProps) => {
+const TixBadge = ({
+  hasTix,
+  setHasTix,
+  artist,
+  setBandSetCount,
+  setRefreshWorkaround,
+}: TixBadgeProps) => {
   const [showConfirm, setShowConfirm] = useState<boolean>(false);
 
   const onClickConfirmDelete: React.MouseEventHandler<HTMLSpanElement> = async (
@@ -21,7 +29,10 @@ const TixBadge = ({ hasTix, setHasTix, artist }: TixBadgeProps) => {
     e.stopPropagation();
     const success = await deleteTicketPdf(artist);
     if (success) {
+      setBandSetCount((c) => (c || 0) - 1);
+      removeArtistTixInfoFromLS(artist);
       setHasTix(false);
+      setRefreshWorkaround(new Date().getTime());
     }
   };
   return (
@@ -91,7 +102,7 @@ const ConfirmRemove = ({
             }
       }
     >
-      confirm? {countdownTime > 0 && `(${countdownTime})`}
+      confirm{countdownTime > 0 && `? (${countdownTime})`}
     </button>
   );
 };

@@ -1,7 +1,7 @@
 import { openDB } from "idb";
 import type { BaybeatsStage, SetMetadata } from "../types/types";
 
-const dbPromise = openDB("pdf-store", 1, {
+const dbPromise = await openDB("pdf-files", 1, {
   upgrade(db) {
     db.createObjectStore("pdf-files");
   },
@@ -64,8 +64,7 @@ const getCleanBandName = (bandName: string) =>
 const storeTicketPdf = async (file: File, bandName: string) => {
   const cleanedBandName = getCleanBandName(bandName);
   try {
-    const db = await dbPromise;
-    await db.put("pdf-files", file, cleanedBandName);
+    await dbPromise.put("pdf-files", file, cleanedBandName);
     console.log(`Stored ${cleanedBandName} tix in IndexedDB`);
     return true;
   } catch (error) {
@@ -76,8 +75,7 @@ const storeTicketPdf = async (file: File, bandName: string) => {
 
 const deleteTicketPdf = async (id: string) => {
   try {
-    const db = await dbPromise;
-    await db.delete("pdf-files", getCleanBandName(id));
+    await dbPromise.delete("pdf-files", getCleanBandName(id));
     console.log(`deleted ${id} tix in IndexedDB`);
     return true;
   } catch (error) {
@@ -86,15 +84,47 @@ const deleteTicketPdf = async (id: string) => {
   }
 };
 
-export const getIfPDFExists = async (id: string) => {
-  const db = await dbPromise;
-  const f = getCleanBandName(id);
-  return (await db.count("pdf-files", f)) > 0;
+export const getStoredPdfCount = async (): Promise<number> => {
+  return await dbPromise.count("pdf-files");
 };
 
-export const getPDFById = async (id: string) => {
-  const db = await dbPromise;
-  return await db.get("pdf-files", getCleanBandName(id));
+export const getIfPDFExists = async (id: string): Promise<boolean> => {
+  const f = getCleanBandName(id);
+  return (await dbPromise.count("pdf-files", f)) > 0;
+};
+
+export const getPDFById = async (id: string): Promise<Blob> => {
+  return await dbPromise.get("pdf-files", getCleanBandName(id));
+};
+
+export const updateTixCountLSForArtist = (
+  artist: string,
+  changeAmount: number,
+) => {
+  // update artist set tix count and total tix count
+  const cleanedArtistName = getCleanBandName(artist);
+  localStorage.setItem(cleanedArtistName, changeAmount.toString());
+  const currentNum = parseInt(localStorage.getItem("tixCount") || "0");
+  const newNum = currentNum + (changeAmount || 0);
+  console.log("currentNum: ", currentNum);
+  console.log("newNum: ", newNum);
+  localStorage.setItem("tixCount", newNum.toString());
+};
+
+export const removeArtistTixInfoFromLS = (artist: string) => {
+  const cleanedArtistName = getCleanBandName(artist);
+  const artistSetTixCount = localStorage.getItem(cleanedArtistName);
+  console.log("cleanedArtistName: ", cleanedArtistName);
+  console.log("artistSetTixCount: ", artistSetTixCount);
+  localStorage.setItem(
+    "tixCount",
+    (
+      parseInt(localStorage.getItem("tixCount") || "0") -
+      parseInt(artistSetTixCount || "0")
+    ).toString(),
+  );
+
+  localStorage.removeItem(cleanedArtistName);
 };
 
 export {

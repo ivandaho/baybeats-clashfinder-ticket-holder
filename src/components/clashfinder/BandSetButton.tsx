@@ -14,6 +14,7 @@ import {
   getPDFById,
   processPdfData,
   storeTicketPdf,
+  updateTixCountLSForArtist,
 } from "../../utils/pdf";
 import cx from "classnames";
 import type { BaybeatsSet, BaybeatsStage } from "../../types/types";
@@ -30,6 +31,7 @@ type BandSetButtonProps = {
   stage: BaybeatsStage;
   minTime: number;
   pixelsPerMinute: number;
+  setBandSetCount: Dispatch<SetStateAction<number | null>>;
   setRefreshWorkaround: Dispatch<SetStateAction<number>>;
   refreshWorkaround: number;
 };
@@ -39,8 +41,9 @@ const BandSetButton = ({
   minTime,
   stage,
   pixelsPerMinute,
-  setRefreshWorkaround,
   refreshWorkaround,
+  setRefreshWorkaround,
+  setBandSetCount,
 }: BandSetButtonProps) => {
   const { startTime, artist, note } = baybeatsSet;
   const endTime = addMinutes(startTime, stage === "Concourse" ? 30 : 40);
@@ -76,7 +79,12 @@ const BandSetButton = ({
 
             const setMetadata = processPdfData(fullText, pdf.numPages);
             const success = await storeTicketPdf(file, setMetadata.bandName);
+            updateTixCountLSForArtist(
+              setMetadata.bandName,
+              setMetadata.tixCount,
+            );
             if (success) {
+              setBandSetCount((c) => (c || 0) + 1);
               setRefreshWorkaround(new Date().getTime());
             }
           } catch (error) {
@@ -138,7 +146,13 @@ const BandSetButton = ({
           </div>
         )}
         {needTix && (
-          <TixBadge hasTix={hasTix} artist={artist} setHasTix={setHasTix} />
+          <TixBadge
+            setRefreshWorkaround={setRefreshWorkaround}
+            setBandSetCount={setBandSetCount}
+            hasTix={hasTix}
+            artist={artist}
+            setHasTix={setHasTix}
+          />
         )}
       </div>
       <input
