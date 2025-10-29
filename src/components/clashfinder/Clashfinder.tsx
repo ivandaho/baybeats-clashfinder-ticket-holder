@@ -46,15 +46,21 @@ function ClashFinder() {
   }
 
   return (
-    <div className="bg-gradient-to-br rounded-lg from-fuchsia-900 via-fuchsia-800 to-fuchsia-900 sm:p-4">
+    <div className="bg-gradient-to-br rounded-lg from-fuchsia-900 via-fuchsia-1000 to-fuchsia-1000 sm:p-4">
       <div className="pl-1">
-        <h1 className="text-4xl font-bold text-white mt-4">Baybeats 2025</h1>
+        <h1 className="text-4xl font-bold text-white mt-4">
+          Baybeats 2025 Clashfinder
+        </h1>
+        <h4 className="text-white text-xs leading-tight max-w-screen">
+          Clashfinder + ticket management. click any band slot to store any
+          ticket on this device. everything runs locally, nothing is uploaded.
+          <br />
+        </h4>
         <h4 className="text-white text-xs leading-tight mb-6 max-w-screen">
-          Clashfinder + ticket management. click any band slot to upload any
-          ticket. everything runs locally, nothing is uploaded
+          Tickets required only for performances at Powerhouse and Annexe.
         </h4>
       </div>
-      <div className="flex gap-3 text-nowrap overflow-x-auto py-2 px-2 max-w-screen">
+      <div className="flex gap-3 text-nowrap py-2 px-2 max-w-screen">
         {Object.keys(festivalData).map((day) => (
           <button
             key={day}
@@ -69,8 +75,8 @@ function ClashFinder() {
           </button>
         ))}
       </div>
-      <div className="bg-white/10 backdrop-blur-sm rounded-xl px-2 overflow-visible overflow-x-auto max-w-[1200px]">
-        <div className="flex gap-0 py-4">
+      <div className="bg-fuchsia-950 backdrop-blur-sm rounded-xl px-2 max-w-[1200px]">
+        <div className="flex gap-0">
           {/* Time column */}
           <div
             className="relative flex-shrink-0 w-8 mr-4"
@@ -91,11 +97,8 @@ function ClashFinder() {
 
           {/* Stage columns */}
           {stages.map((stage) => (
-            <div
-              key={stage}
-              className="flex-1 min-w-[120px] max-w-[240px] mx-1"
-            >
-              <div className="text-white font-bold text-center mb-4 pb-2 border-b-2 border-white/30 text-nowrap truncate">
+            <div key={stage} className="flex-1 min-w-[120px] max-w-[240px]">
+              <div className="bg-fuchsia-950 text-white font-bold text-center mb-4 p-2 border-b-2 border-white/30 text-nowrap truncate sticky top-0 z-11">
                 {stage}
               </div>
               <div
@@ -106,9 +109,13 @@ function ClashFinder() {
                 {hourMarkers.map((marker) => (
                   <div
                     key={marker.minutes}
-                    className="absolute left-0 right-0 border-t border-white/10"
+                    className="absolute left-0 right-0 border-t border-white/10 flex justify-center"
                     style={{ top: `${marker.position}px` }}
-                  />
+                  >
+                    <span className="absolute top-[-0.5rem] self-center text-xs opacity-25">
+                      {marker.label}
+                    </span>
+                  </div>
                 ))}
 
                 {/* Artist slots */}

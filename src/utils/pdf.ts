@@ -67,8 +67,10 @@ const storeTicketPdf = async (file: File, bandName: string) => {
     const db = await dbPromise;
     await db.put("pdf-files", file, cleanedBandName);
     console.log(`Stored ${cleanedBandName} tix in IndexedDB`);
+    return true;
   } catch (error) {
     console.error(`Failed to store ${cleanedBandName} tix in IndexedDB`, error);
+    return false;
   }
 };
 
@@ -77,15 +79,16 @@ const deleteTicketPdf = async (id: string) => {
     const db = await dbPromise;
     await db.delete("pdf-files", getCleanBandName(id));
     console.log(`deleted ${id} tix in IndexedDB`);
+    return true;
   } catch (error) {
     console.error(`Failed to deleted ${id} tix in IndexedDB`, error);
+    return false;
   }
 };
 
 export const getIfPDFExists = async (id: string) => {
   const db = await dbPromise;
   const f = getCleanBandName(id);
-  console.log("f: ", f);
   return (await db.count("pdf-files", f)) > 0;
 };
 

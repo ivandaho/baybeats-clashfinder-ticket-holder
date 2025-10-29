@@ -3,7 +3,7 @@
     "day_1": {
       "date": "30 Oct, Thu",
       "stages": {
-        "Outdoor Theatre": [
+        "Outdoor": [
           {
             "time": "7pm",
             "artist": "SHINSEINA"
@@ -52,7 +52,7 @@
             "artist": "Chicosci (PH)"
           }
         ],
-        "Powerhouse (Singtel Waterfront)": [
+        "Powerhouse": [
           {
             "time": "6.10pm",
             "artist": "A R A J U A"
@@ -70,7 +70,7 @@
             "artist": "JPBS (TH)"
           }
         ],
-        "Outdoor Theatre": [
+        "Outdoor": [
           {
             "time": "7pm",
             "artist": "Jumat Gombrong (ID)"
@@ -139,7 +139,7 @@
             "artist": "Sekumpulan Orang Gila (MY)"
           }
         ],
-        "Powerhouse (Singtel Waterfront)": [
+        "Powerhouse": [
           {
             "time": "7.10pm",
             "artist": "ANECHOIS"
@@ -157,7 +157,7 @@
             "artist": "paranoid void (JP)"
           }
         ],
-        "Outdoor Theatre": [
+        "Outdoor": [
           {
             "time": "6.30pm",
             "artist": "Sandwich (PH)"
@@ -230,7 +230,7 @@
             "artist": "Battlesnake (AU)"
           }
         ],
-        "Powerhouse (Singtel Waterfront)": [
+        "Powerhouse": [
           {
             "time": "7.10pm",
             "artist": "Blanco Teta (AR)"
@@ -248,7 +248,7 @@
             "artist": "mouse on the keys (JP)"
           }
         ],
-        "Outdoor Theatre": [
+        "Outdoor": [
           {
             "time": "6.30pm",
             "artist": "Saints Amongst Sinners"

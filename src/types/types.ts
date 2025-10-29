@@ -7,5 +7,5 @@ export type SetMetadata = {
 
 export type BaybeatsStage =
   | "Annexe"
-  | "Powerhouse (Singtel Waterfront)"
+  | "Powerhouse"
   | "Unknown";

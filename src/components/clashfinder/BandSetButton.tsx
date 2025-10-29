@@ -11,6 +11,7 @@ import {
 } from "../../utils/pdf";
 import cx from "classnames";
 import type { BaybeatsStage } from "../../types/types";
+import { TixBadge } from "./TixBadge";
 
 pdfjsLib.GlobalWorkerOptions.workerSrc = workerUrl;
 
@@ -67,8 +68,11 @@ const BandSetButton = ({
             }
 
             const setMetadata = processPdfData(fullText, pdf.numPages);
-            console.log("d: ", setMetadata);
-            storeTicketPdf(file, setMetadata.bandName);
+            const success = await storeTicketPdf(file, setMetadata.bandName);
+            if (success) {
+							// TODO
+              console.log("success");
+            }
           } catch (error) {
             console.error("Error processing PDF:", error);
           }
@@ -81,7 +85,6 @@ const BandSetButton = ({
 
   useEffect(() => {
     const initFn = async () => {
-      console.log("artist: ", artist);
       setHasTix(await getIfPDFExists(artist));
     };
     initFn();
@@ -96,6 +99,8 @@ const BandSetButton = ({
     setTimeout(() => URL.revokeObjectURL(url), 60000);
   };
 
+  const needTix = isNeedTix(stage);
+
   return (
     <>
       <div
@@ -108,11 +113,7 @@ const BandSetButton = ({
         }}
         className={cx(
           "absolute left-1 right-1 bg-gradient-to-br to-purple-600 rounded-lg p-2 overflow-hidden hover:scale-105 hover:z-10 transition-transform cursor-pointer shadow-lg flex flex-col",
-          isNeedTix(stage)
-            ? hasTix
-              ? haveTixClass
-              : noTixClass
-            : dontNeedTixClass,
+          needTix ? (hasTix ? haveTixClass : noTixClass) : dontNeedTixClass,
         )}
         style={{
           top: `${topPosition}px`,
@@ -128,16 +129,8 @@ const BandSetButton = ({
             {note}
           </div>
         )}
-        {hasTix && (
-          <button
-            className="bg-red-700 text-white py-1 px-2 self-end text-xs"
-            onClick={(e) => {
-              e.stopPropagation();
-              deleteTicketPdf(artist);
-            }}
-          >
-            remove tickets
-          </button>
+        {needTix && (
+          <TixBadge hasTix={hasTix} artist={artist} setHasTix={setHasTix} />
         )}
       </div>
       <input

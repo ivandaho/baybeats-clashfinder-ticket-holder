@@ -18,7 +18,7 @@ const isNeedTix = (stage: BaybeatsStage) => {
   switch (stage) {
     case "Annexe":
       return true;
-    case "Powerhouse (Singtel Waterfront)":
+    case "Powerhouse":
       return true;
     default:
       return false;
