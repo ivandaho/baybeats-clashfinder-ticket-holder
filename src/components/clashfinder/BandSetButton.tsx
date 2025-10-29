@@ -1,4 +1,11 @@
-import { useEffect, useRef, useState, type ChangeEvent } from "react";
+import {
+  useEffect,
+  useRef,
+  useState,
+  type ChangeEvent,
+  type Dispatch,
+  type SetStateAction,
+} from "react";
 import { addMinutes, isNeedTix, timeToMinutes } from "../../utils/clashfinder";
 import * as pdfjsLib from "pdfjs-dist";
 import workerUrl from "pdfjs-dist/build/pdf.worker.mjs?url";
@@ -23,6 +30,8 @@ type BandSetButtonProps = {
   stage: BaybeatsStage;
   minTime: number;
   pixelsPerMinute: number;
+  setRefreshWorkaround: Dispatch<SetStateAction<number>>;
+  refreshWorkaround: number;
 };
 
 const BandSetButton = ({
@@ -30,6 +39,8 @@ const BandSetButton = ({
   minTime,
   stage,
   pixelsPerMinute,
+  setRefreshWorkaround,
+  refreshWorkaround,
 }: BandSetButtonProps) => {
   const { startTime, artist, note } = baybeatsSet;
   const endTime = addMinutes(startTime, stage === "Concourse" ? 30 : 40);
@@ -66,8 +77,7 @@ const BandSetButton = ({
             const setMetadata = processPdfData(fullText, pdf.numPages);
             const success = await storeTicketPdf(file, setMetadata.bandName);
             if (success) {
-              // TODO
-              console.log("success");
+              setRefreshWorkaround(new Date().getTime());
             }
           } catch (error) {
             console.error("Error processing PDF:", error);
@@ -84,7 +94,7 @@ const BandSetButton = ({
       setHasTix(await getIfPDFExists(artist));
     };
     initFn();
-  }, [artist]);
+  }, [artist, refreshWorkaround]);
 
   const openTixBlob = async () => {
     const d = await getPDFById(artist);

@@ -15,6 +15,7 @@ const typedFestivalData: BaybeatsFestivalData = festivalData;
 
 function Clashfinder() {
   const [selectedDay, setSelectedDay] = useState<BaybeatsDay>("day_1");
+  const [refreshWorkaround, setRefreshWorkaround] = useState<number>(0);
 
   const {
     timelineHeight,
@@ -82,6 +83,8 @@ function Clashfinder() {
                 {dayData.stages[stage]?.map((baybeatsSet, i) => {
                   return (
                     <BandSetButton
+                      setRefreshWorkaround={setRefreshWorkaround}
+                      refreshWorkaround={refreshWorkaround}
                       key={i}
                       baybeatsSet={baybeatsSet}
                       stage={stage as BaybeatsStage}
