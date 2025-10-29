@@ -99,7 +99,7 @@ function Clashfinder() {
           </button>
         ) : null}
       </div>
-      <div className="bg-fuchsia-950 backdrop-blur-sm rounded-xl px-2 max-w-[1200px]">
+      <div className="bg-fuchsia-950 backdrop-blur-sm rounded-xl px-2 overflow-auto">
         <div className="flex gap-0">
           {/* Time column */}
           <div className="relative flex-shrink-0 w-8 mr-4 top-12">
