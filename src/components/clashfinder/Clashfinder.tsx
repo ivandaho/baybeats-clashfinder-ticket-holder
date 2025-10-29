@@ -93,13 +93,13 @@ function Clashfinder() {
               localStorage.removeItem("hideBanner");
               setHideBanner(false);
             }}
-            className={`px-2 py-1 bg-fuchsia-900 rounded-md font-semibold transition-all text-sm text-white hover:bg-purple-700" `}
+            className={`rounded-md font-semibold transition-all text-sm text-white hover:bg-purple-700" `}
           >
             info
           </button>
         ) : null}
       </div>
-      <div className="bg-fuchsia-950 backdrop-blur-sm rounded-xl px-2 overflow-auto">
+      <div className="rounded-xl px-2">
         <div className="flex gap-0">
           {/* Time column */}
           <div className="relative flex-shrink-0 w-8 mr-4 top-12">
@@ -110,13 +110,18 @@ function Clashfinder() {
 
           {/* Stage columns */}
           {stages.map((stage) => (
-            <div key={stage} className="flex-1 min-w-[120px] max-w-[240px]">
+            <div
+              key={stage}
+              className="flex-1 min-w-[120px] max-w-[240px] bg-fuchsia-950 backdrop-blur-sm"
+            >
               <div className="bg-fuchsia-950 text-white font-bold text-center mb-4 p-2 border-b-2 border-white/30 text-nowrap truncate sticky top-0 z-11">
                 {stage}
               </div>
               <div
-                className="relative border-l-2 border-white/20"
-                style={{ height: `${timelineHeight}px` }}
+                className="relative border-l-2 border-white/20 l-[-1px]"
+                style={{
+                  height: `${timelineHeight}px`,
+                }}
               >
                 {/* Hour grid lines */}
                 <TimeMarkers markers={timeMarkers} />
