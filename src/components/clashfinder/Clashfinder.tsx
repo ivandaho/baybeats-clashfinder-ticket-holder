@@ -140,7 +140,7 @@ function Clashfinder() {
               <div
                 className="relative border-l-2 border-white/20 l-[-1px]"
                 style={{
-                  height: `${timelineHeight}px`,
+                  height: `${timelineHeight + 12}px`,
                 }}
               >
                 {/* Hour grid lines */}
