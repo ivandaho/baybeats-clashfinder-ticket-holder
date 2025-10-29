@@ -5,7 +5,7 @@ import { BandSetButton } from "./BandSetButton";
 import { timeToMinutes } from "../../utils/clashfinder";
 import type { BaybeatsStage } from "../../types/types";
 
-function ClashFinder() {
+function Clashfinder() {
   const [selectedDay, setSelectedDay] = useState("day_1");
 
   const dayData = festivalData[selectedDay];
@@ -139,4 +139,4 @@ function ClashFinder() {
   );
 }
 
-export default ClashFinder;
+export default Clashfinder;

@@ -1,9 +1,9 @@
 import "./App.css";
-import ClashFinder from "./components/clashfinder/Clashfinder";
+import Clashfinder from "./components/clashfinder/Clashfinder";
 
 
 function App() {
-  return <ClashFinder />;
+  return <Clashfinder />;
 }
 
 export default App;
