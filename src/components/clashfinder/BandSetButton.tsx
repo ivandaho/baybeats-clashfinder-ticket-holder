@@ -3,14 +3,13 @@ import { isNeedTix, timeToMinutes } from "../../utils/clashfinder";
 import * as pdfjsLib from "pdfjs-dist";
 import workerUrl from "pdfjs-dist/build/pdf.worker.mjs?url";
 import {
-  deleteTicketPdf,
   getIfPDFExists,
   getPDFById,
   processPdfData,
   storeTicketPdf,
 } from "../../utils/pdf";
 import cx from "classnames";
-import type { BaybeatsStage } from "../../types/types";
+import type { BaybeatsSet, BaybeatsStage } from "../../types/types";
 import { TixBadge } from "./TixBadge";
 
 pdfjsLib.GlobalWorkerOptions.workerSrc = workerUrl;
@@ -20,23 +19,19 @@ const noTixClass = "from-pink-500";
 const dontNeedTixClass = "from-blue-400";
 
 type BandSetButtonProps = {
-  slot: {
-    time: string;
-    artist: string;
-    note: string;
-  };
+  baybeatsSet: BaybeatsSet;
   stage: BaybeatsStage;
   minTime: number;
   pixelsPerMinute: number;
 };
 
 const BandSetButton = ({
-  slot,
+  baybeatsSet,
   minTime,
   stage,
   pixelsPerMinute,
 }: BandSetButtonProps) => {
-  const { time, artist, note } = slot;
+  const { time, artist, note } = baybeatsSet;
   const startMinutes = timeToMinutes(time);
   const topPosition = (startMinutes - minTime) * pixelsPerMinute;
   const height = 45 * pixelsPerMinute; // 45 min set

@@ -3,21 +3,26 @@ import { useState } from "react";
 import { festival_schedule as festivalData } from "../../schedule.json";
 import { BandSetButton } from "./BandSetButton";
 import { timeToMinutes } from "../../utils/clashfinder";
-import type { BaybeatsStage } from "../../types/types";
+import type {
+  BaybeatsDay,
+  BaybeatsFestivalData,
+  BaybeatsStage,
+} from "../../types/types";
 
 function Clashfinder() {
-  const [selectedDay, setSelectedDay] = useState("day_1");
+  const [selectedDay, setSelectedDay] = useState<BaybeatsDay>("day_1");
 
-  const dayData = festivalData[selectedDay];
-  const stages = Object.keys(dayData.stages);
+  const typedFestivalData: BaybeatsFestivalData = festivalData;
+  const dayData = typedFestivalData[selectedDay];
+  const stages = Object.keys(dayData.stages) as BaybeatsStage[];
 
   // Find time range
   let minTime = Infinity;
   let maxTime = 0;
 
   stages.forEach((stage) => {
-    dayData.stages[stage].forEach((slot) => {
-      const startMinutes = timeToMinutes(slot.time);
+    dayData.stages[stage]?.forEach((baybeatsSet) => {
+      const startMinutes = timeToMinutes(baybeatsSet.time);
       const endMinutes = startMinutes + 45; // 45 min set
       minTime = Math.min(minTime, startMinutes);
       maxTime = Math.max(maxTime, endMinutes);
@@ -33,7 +38,12 @@ function Clashfinder() {
   const timelineHeight = totalMinutes * pixelsPerMinute;
 
   // Generate hour markers
-  const hourMarkers = [];
+  const hourMarkers: {
+    minutes: number;
+    label: string;
+    position: number;
+  }[] = [];
+
   for (let minutes = minTime; minutes <= maxTime; minutes += 60) {
     const hour = Math.floor(minutes / 60);
     const displayHour = hour > 12 ? hour - 12 : hour === 0 ? 12 : hour;
@@ -61,7 +71,7 @@ function Clashfinder() {
         </h4>
       </div>
       <div className="flex gap-3 text-nowrap py-2 px-2 max-w-screen">
-        {Object.keys(festivalData).map((day) => (
+        {(Object.keys(typedFestivalData) as BaybeatsDay[]).map((day) => (
           <button
             key={day}
             onClick={() => setSelectedDay(day)}
@@ -71,7 +81,7 @@ function Clashfinder() {
                 : "text-white hover:bg-purple-700"
             }`}
           >
-            {festivalData[day].date}
+            {typedFestivalData[day].date}
           </button>
         ))}
       </div>
@@ -119,11 +129,11 @@ function Clashfinder() {
                 ))}
 
                 {/* Artist slots */}
-                {dayData.stages[stage].map((slot, i) => {
+                {dayData.stages[stage]?.map((baybeatsSet, i) => {
                   return (
                     <BandSetButton
                       key={i}
-                      slot={slot}
+                      baybeatsSet={baybeatsSet}
                       stage={stage as BaybeatsStage}
                       minTime={minTime}
                       pixelsPerMinute={pixelsPerMinute}
