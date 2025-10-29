@@ -11,11 +11,12 @@ import { useGetTimeRangeStuff } from "./useGetTimeRangeStuff";
 import { festival_schedule as festivalData } from "../../schedule.json";
 import { H4 } from "./H4";
 import { getStoredPdfCount } from "../../utils/pdf";
+import { getDefaultDay } from "../../utils/clashfinder";
 
 const typedFestivalData: BaybeatsFestivalData = festivalData;
 
 function Clashfinder() {
-  const [selectedDay, setSelectedDay] = useState<BaybeatsDay>("day_1");
+  const [selectedDay, setSelectedDay] = useState<BaybeatsDay>(getDefaultDay());
   const [refreshWorkaround, setRefreshWorkaround] = useState<number>(0);
 
   const {
@@ -62,18 +63,24 @@ function Clashfinder() {
             </span>
           </h1>
           <H4>
-            Clashfinder + ticket management. click any band slot to store any
-            ticket on this device. everything runs locally, nothing is uploaded.
+            Ticket management: Click <strong>any</strong> band slot to start
+            storing tickets for <strong>any</strong> set on this device.
+            Everything runs locally, nothing is uploaded.
           </H4>
           <H4>
             Tickets required only for performances at Powerhouse and Annexe.
           </H4>
           <H4>
-            You have uploaded {tixCount} tickets for {bandSetCount} sets.
+            You have uploaded <strong>{tixCount}</strong> tickets for{" "}
+            <strong>{bandSetCount}</strong> sets.
+          </H4>
+          <H4>
+            After uploading, click the slot to access your ticket(s) for that
+            set.
           </H4>
         </div>
       )}
-      <div className="flex gap-3 text-nowrap py-2 px-2 max-w-screen overflow-x-auto">
+      <div className="flex gap-3 text-nowrap py-2 px-2 overflow-x-auto">
         {(Object.keys(typedFestivalData) as BaybeatsDay[]).map((day) => (
           <button
             key={day}
@@ -93,11 +100,17 @@ function Clashfinder() {
               localStorage.removeItem("hideBanner");
               setHideBanner(false);
             }}
-            className={`rounded-md font-semibold transition-all text-sm text-white hover:bg-purple-700" `}
+            className={`rounded-md font-semibold text-sm text-white hover:bg-purple-700" `}
           >
             info
           </button>
         ) : null}
+        <a
+          href="https://github.com/ivandaho/baybeats-clashfinder-ticket-holder"
+          className="rounded-md font-semibold text-sm text-white content-center px-1"
+        >
+          GitHub
+        </a>
       </div>
       <div className="rounded-xl px-2">
         <div className="flex gap-0">

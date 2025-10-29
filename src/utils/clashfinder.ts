@@ -1,4 +1,4 @@
-import type { BaybeatsStage } from "../types/types";
+import type { BaybeatsDay, BaybeatsStage } from "../types/types";
 
 const timeToMinutes = (time: string) => {
   const match = time.match(/(\d+)(?:\.(\d+))?(am|pm)/);
@@ -66,4 +66,19 @@ const addMinutes = (timeStr: string, minutesToAdd: number) => {
   }
 };
 
-export { addMinutes, timeToMinutes, isNeedTix };
+const getDefaultDay = (): BaybeatsDay => {
+  const d = new Date().getDate();
+  switch (d) {
+    case 30:
+    default:
+      return "day_1";
+    case 31:
+      return "day_2";
+    case 1:
+      return "day_3";
+    case 2:
+      return "day_4";
+  }
+};
+
+export { addMinutes, timeToMinutes, isNeedTix, getDefaultDay };
