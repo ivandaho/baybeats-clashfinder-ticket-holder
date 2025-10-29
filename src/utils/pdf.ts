@@ -88,11 +88,6 @@ export const getStoredPdfCount = async (): Promise<number> => {
   return await dbPromise.count("pdf-files");
 };
 
-export const getIfPDFExists = async (id: string): Promise<boolean> => {
-  const f = getCleanBandName(id);
-  return (await dbPromise.count("pdf-files", f)) > 0;
-};
-
 export const getPDFById = async (id: string): Promise<Blob> => {
   return await dbPromise.get("pdf-files", getCleanBandName(id));
 };

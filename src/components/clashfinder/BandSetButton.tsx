@@ -11,7 +11,6 @@ import * as pdfjsLib from "pdfjs-dist";
 import workerUrl from "pdfjs-dist/build/pdf.worker.mjs?url";
 import {
   getArtistSetTixCount,
-  getIfPDFExists,
   getPDFById,
   processPdfData,
   storeTicketPdf,
@@ -20,7 +19,6 @@ import {
 import cx from "classnames";
 import type { BaybeatsSet, BaybeatsStage } from "../../types/types";
 import { TixBadge } from "./TixBadge";
-import { useLongPress } from "@uidotdev/usehooks";
 
 pdfjsLib.GlobalWorkerOptions.workerSrc = workerUrl;
 
@@ -55,7 +53,7 @@ const BandSetButton = ({
 
   const inputRef = useRef<HTMLInputElement>(null);
   const [tixCount, setTixCount] = useState<number>(0);
-  const [isLongPressed, setIsLongPressed] = useState<boolean>(false);
+  const [ticketBlobLink, setTicketBlobLink] = useState<string>("");
 
   const handleFileChange = async (event: ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
@@ -104,8 +102,10 @@ const BandSetButton = ({
     const initFn = async () => {
       const artistSetTixCount = getArtistSetTixCount(artist);
       // make sure pdf and tix count exists locally
-      const hasPdfAndTixCount =
-        (await getIfPDFExists(artist)) && artistSetTixCount > 0;
+      const pdfBlobUrl = await getPDFById(artist);
+      const url = pdfBlobUrl ? URL.createObjectURL(pdfBlobUrl) : "#";
+      setTicketBlobLink(url);
+      const hasPdfAndTixCount = !!pdfBlobUrl && artistSetTixCount > 0;
       if (hasPdfAndTixCount) {
         setTixCount(getArtistSetTixCount(artist));
       }
@@ -113,47 +113,16 @@ const BandSetButton = ({
     initFn();
   }, [artist, refreshWorkaround]);
 
-  const openTixBlob = async () => {
-    const d = await getPDFById(artist);
-    const url = URL.createObjectURL(d);
-    window.open(url, "_blank");
-
-    // Clean up after a delay (user should have opened it by then)
-    setTimeout(() => URL.revokeObjectURL(url), 60000);
-  };
-
   const needTix = isNeedTix(stage);
-  const attrs = useLongPress(
-    () => {
-      setIsLongPressed(true);
-    },
-    {
-      onFinish: (e) => {
-        e.preventDefault();
-        setTimeout(() => {
-          setIsLongPressed(false);
-        }, 500);
-      },
-      onCancel: (e) => {
-        e.preventDefault();
-        setTimeout(() => {
-          setIsLongPressed(false);
-        }, 5000);
-      },
-      threshold: 500,
-    },
-  );
 
   return (
     <>
-      <div
-        {...attrs}
-        onClick={() => {
-          if (tixCount > 0) {
-            if (!isLongPressed) {
-              openTixBlob();
-            }
-          } else {
+      <a
+        href={ticketBlobLink}
+        target="_blank"
+        onClick={(e) => {
+          if (tixCount === 0) {
+            e.preventDefault();
             inputRef.current?.click();
           }
         }}
@@ -183,7 +152,6 @@ const BandSetButton = ({
         )}
         {needTix && (
           <TixBadge
-            isLongPressed={isLongPressed}
             setRefreshWorkaround={setRefreshWorkaround}
             setBandSetCount={setBandSetCount}
             tixCount={tixCount}
@@ -191,7 +159,7 @@ const BandSetButton = ({
             artist={artist}
           />
         )}
-      </div>
+      </a>
       <input
         hidden
         ref={inputRef}

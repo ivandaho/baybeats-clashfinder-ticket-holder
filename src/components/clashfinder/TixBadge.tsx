@@ -8,7 +8,6 @@ type TixBadgeProps = {
   setTixCount: Dispatch<SetStateAction<number>>;
   setBandSetCount: Dispatch<SetStateAction<null | number>>;
   setRefreshWorkaround: Dispatch<SetStateAction<number>>;
-  isLongPressed: boolean;
 };
 
 const btnClass = "text-white py-[2px] px-[4px] self-end text-[10px] rounded-sm";
@@ -21,7 +20,6 @@ const TixBadge = ({
   artist,
   setBandSetCount,
   setRefreshWorkaround,
-  isLongPressed,
 }: TixBadgeProps) => {
   const [showConfirm, setShowConfirm] = useState<boolean>(false);
 
@@ -29,6 +27,7 @@ const TixBadge = ({
     e,
   ) => {
     e.stopPropagation();
+    e.preventDefault();
     const success = await deleteTicketPdf(artist);
     if (success) {
       setBandSetCount((c) => (c || 0) - 1);
@@ -38,12 +37,7 @@ const TixBadge = ({
     }
   };
   return (
-    <div
-      className={cx(
-        "absolute bottom-0 right-0 mb-1 mr-1",
-        isLongPressed ? "opacity-0" : "opacity-100",
-      )}
-    >
+    <div className={cx("absolute bottom-0 right-0 mb-1 mr-1")}>
       {tixCount > 0 ? (
         showConfirm ? (
           <ConfirmRemove
@@ -55,6 +49,7 @@ const TixBadge = ({
             className={cx(btnClass, btnDangerClass)}
             onClick={(e) => {
               e.stopPropagation();
+              e.preventDefault();
               setShowConfirm(true);
             }}
           >
@@ -106,6 +101,7 @@ const ConfirmRemove = ({
           ? onClickConfirmDelete
           : (e) => {
               e.stopPropagation();
+              e.preventDefault();
             }
       }
     >
