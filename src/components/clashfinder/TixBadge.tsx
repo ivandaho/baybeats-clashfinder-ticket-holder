@@ -8,9 +8,9 @@ type TixBadgeProps = {
   setHasTix: Dispatch<SetStateAction<boolean>>;
 };
 
-const btnClass = "text-white py-1 px-1 self-end text-[12px]";
+const btnClass = "text-white py-[2px] px-[2px] self-end text-[10px] rounded-sm";
 const btnDangerClass = "bg-rose-700";
-const btnDisabledClass = "bg-gray-500";
+const btnDisabledClass = "bg-gray-400 text-white";
 
 const TixBadge = ({ hasTix, setHasTix, artist }: TixBadgeProps) => {
   const [showConfirm, setShowConfirm] = useState<boolean>(false);
@@ -40,13 +40,11 @@ const TixBadge = ({ hasTix, setHasTix, artist }: TixBadgeProps) => {
               setShowConfirm(true);
             }}
           >
-            remove tix
+            remove
           </button>
         )
       ) : (
-        <span className="bg-fuchsia-800 text-white py-1 px-1 self-end text-xs rounded-md">
-          add tix
-        </span>
+        <span className={cx(btnClass, "bg-fuchsia-800")}>add tix</span>
       )}
     </div>
   );

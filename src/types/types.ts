@@ -27,3 +27,10 @@ export type FestivalDay = {
   date: string;
   stages: Partial<Record<BaybeatsStage, BaybeatsSet[]>>;
 };
+export type TimeMarker = {
+    minutes: number;
+    position: number;
+    isHour: boolean;
+    displayHour: number;
+    period: string;
+  }

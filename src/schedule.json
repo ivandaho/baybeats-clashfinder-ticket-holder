@@ -282,11 +282,11 @@
         ],
         "Concourse": [
           {
-            "tstartTime": "5pm",
+            "startTime": "5pm",
             "artist": "Sekumpulan Orang Gila (MY)"
           },
           {
-            "tstartTime": "6pm",
+            "startTime": "6pm",
             "artist": "Microchip Terror"
           },
           {

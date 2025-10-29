@@ -108,7 +108,7 @@ const BandSetButton = ({
           }
         }}
         className={cx(
-          "absolute left-1 right-1 bg-gradient-to-br to-purple-600 rounded-lg p-2 overflow-hidden hover:scale-105 hover:z-10 transition-transform cursor-pointer shadow-lg flex flex-col",
+          "absolute left-1 right-1 bg-gradient-to-br to-purple-600 rounded-lg px-2 py-1 overflow-hidden hover:scale-105 hover:z-10 transition-transform cursor-pointer shadow-lg flex flex-col",
           needTix ? (hasTix ? haveTixClass : noTixClass) : dontNeedTixClass,
         )}
         style={{
@@ -116,7 +116,7 @@ const BandSetButton = ({
           height: `${height}px`,
         }}
       >
-        <div className="text-white font-bold text-xs mb-1">
+        <div className="text-white/80 font-bold text-[10px] mb-1">
           {startTime} - {endTime}
         </div>
         <div className="text-white font-semibold text-sm leading-tight grow">

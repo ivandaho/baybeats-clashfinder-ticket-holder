@@ -1,60 +1,29 @@
 import { useState } from "react";
-
-import { festival_schedule as festivalData } from "../../schedule.json";
 import { BandSetButton } from "./BandSetButton";
-import { timeToMinutes } from "../../utils/clashfinder";
 import type {
   BaybeatsDay,
   BaybeatsFestivalData,
   BaybeatsStage,
 } from "../../types/types";
+import { TimeColumn } from "./TimeColumn";
+import { TimeMarkers } from "./TimeMarkers";
+import { CurrentTime } from "./CurrentTime";
+import { useGetTimeRangeStuff } from "./useGetTimeRangeStuff";
+import { festival_schedule as festivalData } from "../../schedule.json";
+
+const typedFestivalData: BaybeatsFestivalData = festivalData;
 
 function Clashfinder() {
   const [selectedDay, setSelectedDay] = useState<BaybeatsDay>("day_1");
 
-  const typedFestivalData: BaybeatsFestivalData = festivalData;
-  const dayData = typedFestivalData[selectedDay];
-  const stages = Object.keys(dayData.stages) as BaybeatsStage[];
-
-  // Find time range
-  let minTime = Infinity;
-  let maxTime = 0;
-
-  stages.forEach((stage) => {
-    dayData.stages[stage]?.forEach((baybeatsSet) => {
-      const startMinutes = timeToMinutes(baybeatsSet.startTime);
-      const endMinutes = startMinutes + 45;
-      minTime = Math.min(minTime, startMinutes);
-      maxTime = Math.max(maxTime, endMinutes);
-    });
-  });
-
-  // Round to hour boundaries
-  minTime = Math.floor(minTime / 60) * 60;
-  maxTime = Math.ceil(maxTime / 60) * 60;
-
-  const totalMinutes = maxTime - minTime;
-  const pixelsPerMinute = 2; // Scale factor
-  const timelineHeight = totalMinutes * pixelsPerMinute;
-
-  // Generate hour markers
-  const hourMarkers: {
-    minutes: number;
-    label: string;
-    position: number;
-  }[] = [];
-
-  for (let minutes = minTime; minutes <= maxTime; minutes += 30) {
-    const hour = Math.floor(minutes / 60);
-    const displayHour = hour > 12 ? hour - 12 : hour === 0 ? 12 : hour;
-    const period = hour >= 12 ? "pm" : "am";
-    const isHour = minutes % 60 === 0;
-    hourMarkers.push({
-      minutes,
-      label: isHour ? `${displayHour}${period}` : "",
-      position: (minutes - minTime) * pixelsPerMinute,
-    });
-  }
+  const {
+    timelineHeight,
+    pixelsPerMinute,
+    timeMarkers,
+    stages,
+    dayData,
+    minTime,
+  } = useGetTimeRangeStuff(selectedDay, typedFestivalData);
 
   return (
     <div className="bg-gradient-to-br rounded-lg from-fuchsia-900 via-fuchsia-1000 to-fuchsia-1000 sm:p-4">
@@ -87,19 +56,12 @@ function Clashfinder() {
         ))}
       </div>
       <div className="bg-fuchsia-950 backdrop-blur-sm rounded-xl px-2 max-w-[1200px]">
+        <CurrentTime minTime={minTime} pixelsPerMinute={pixelsPerMinute} />
         <div className="flex gap-0">
           {/* Time column */}
           <div className="relative flex-shrink-0 w-8 mr-4 top-12">
             <div style={{ height: `${timelineHeight}px` }} className="relative">
-              {hourMarkers.map((marker) => (
-                <div
-                  key={marker.minutes}
-                  className="absolute left-0 right-0 text-white text-sm font-semibold"
-                  style={{ top: `${marker.position}px` }}
-                >
-                  {marker.label}
-                </div>
-              ))}
+              <TimeColumn markers={timeMarkers} />
             </div>
           </div>
 
@@ -114,17 +76,7 @@ function Clashfinder() {
                 style={{ height: `${timelineHeight}px` }}
               >
                 {/* Hour grid lines */}
-                {hourMarkers.map((marker) => (
-                  <div
-                    key={marker.minutes}
-                    className="absolute left-0 right-0 border-t border-white/10 flex justify-center"
-                    style={{ top: `${marker.position}px` }}
-                  >
-                    <span className="absolute top-[-0.5rem] self-center text-xs opacity-25">
-                      {marker.label}
-                    </span>
-                  </div>
-                ))}
+                <TimeMarkers markers={timeMarkers} />
 
                 {/* Artist slots */}
                 {dayData.stages[stage]?.map((baybeatsSet, i) => {
