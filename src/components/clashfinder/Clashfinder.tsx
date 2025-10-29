@@ -64,19 +64,20 @@ function Clashfinder() {
           </h1>
           <H4>
             Ticket management: Click <strong>any</strong> band slot to start
-            storing tickets for <strong>any</strong> set on this device.
-            Everything runs locally, nothing is uploaded.
+            storing tickets for <strong>any</strong> set, only on this device.
+            You may select tickets for multiple sets at once.
           </H4>
+          <H4>Everything runs locally, nothing is uploaded.</H4>
           <H4>
             Tickets required only for performances at Powerhouse and Annexe.
           </H4>
           <H4>
-            You have uploaded <strong>{tixCount}</strong> tickets for{" "}
+            You have stored <strong>{tixCount}</strong> tickets for{" "}
             <strong>{bandSetCount}</strong> sets.
           </H4>
           <H4>
-            After uploading, click the slot to access your ticket(s) for that
-            set.
+            After storing tickets, click the slot to access your ticket(s) for
+            that set.
           </H4>
         </div>
       )}
