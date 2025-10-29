@@ -15,7 +15,7 @@ import { TixBadge } from "./TixBadge";
 
 pdfjsLib.GlobalWorkerOptions.workerSrc = workerUrl;
 
-const haveTixClass = "from-green-500";
+const haveTixClass = "from-indigo-900";
 const noTixClass = "from-pink-500";
 const dontNeedTixClass = "from-blue-400";
 
