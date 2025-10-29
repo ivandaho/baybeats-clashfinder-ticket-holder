@@ -10,7 +10,8 @@ export type BaybeatsStage =
   | "Powerhouse"
   | "Outdoor"
   | "LiveWire"
-  | "Concourse";
+  | "Concourse"
+  | "Unknown";
 
 export type BaybeatsDay = "day_1" | "day_2" | "day_3" | "day_4";
 
@@ -24,10 +25,5 @@ export type BaybeatsSet = {
 
 export type FestivalDay = {
   date: string;
-  stages: Partial<
-    Record<
-      BaybeatsStage,
-      BaybeatsSet[]
-    >
-  >;
+  stages: Partial<Record<BaybeatsStage, BaybeatsSet[]>>;
 };
