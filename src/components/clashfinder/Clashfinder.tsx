@@ -78,6 +78,18 @@ function Clashfinder() {
           <H4>
             After storing tickets, click the slot to access your ticket(s) for
             that set.
+            <a
+              href="https://www.esplanade.com/baybeats"
+              className="rounded-md font-semibold text-xs text-white content-center px-1"
+            >
+              Baybeats Website
+            </a>
+            <a
+              href="https://github.com/ivandaho/baybeats-clashfinder-ticket-holder"
+              className="rounded-md font-semibold text-xs text-white content-center px-1"
+            >
+              Code
+            </a>
           </H4>
         </div>
       )}
@@ -106,12 +118,6 @@ function Clashfinder() {
             info
           </button>
         ) : null}
-        <a
-          href="https://github.com/ivandaho/baybeats-clashfinder-ticket-holder"
-          className="rounded-md font-semibold text-sm text-white content-center px-1"
-        >
-          GitHub
-        </a>
       </div>
       <div className="rounded-xl px-2">
         <div className="flex gap-0">
