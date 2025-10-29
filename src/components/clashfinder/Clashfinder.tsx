@@ -7,7 +7,6 @@ import type {
 } from "../../types/types";
 import { TimeColumn } from "./TimeColumn";
 import { TimeMarkers } from "./TimeMarkers";
-import { CurrentTime } from "./CurrentTime";
 import { useGetTimeRangeStuff } from "./useGetTimeRangeStuff";
 import { festival_schedule as festivalData } from "../../schedule.json";
 import { H4 } from "./H4";
@@ -42,7 +41,7 @@ function Clashfinder() {
   }, [refreshWorkaround]);
 
   return (
-    <div className="bg-gradient-to-br rounded-lg from-fuchsia-900 via-fuchsia-1000 to-fuchsia-1000 sm:p-4">
+    <div className="bg-gradient-to-br rounded-lg from-fuchsia-900 via-fuchsia-1000 to-fuchsia-1000 sm:p-4 w-screen">
       <div className="pl-1">
         <h1 className="text-4xl font-bold text-white mt-4">
           Baybeats 2025 Clashfinder
@@ -58,7 +57,7 @@ function Clashfinder() {
           You have uploaded {tixCount} tickets for {bandSetCount} sets.
         </H4>
       </div>
-      <div className="flex gap-3 text-nowrap py-2 px-2 max-w-screen">
+      <div className="flex gap-3 text-nowrap py-2 px-2 max-w-screen overflow-x-auto">
         {(Object.keys(typedFestivalData) as BaybeatsDay[]).map((day) => (
           <button
             key={day}
@@ -73,8 +72,7 @@ function Clashfinder() {
           </button>
         ))}
       </div>
-      <div className="bg-fuchsia-950 backdrop-blur-sm rounded-xl px-2 max-w-[1200px]">
-        <CurrentTime minTime={minTime} pixelsPerMinute={pixelsPerMinute} />
+      <div className="bg-fuchsia-950 backdrop-blur-sm rounded-xl px-2 max-w-[1200px] overflow-scroll">
         <div className="flex gap-0">
           {/* Time column */}
           <div className="relative flex-shrink-0 w-8 mr-4 top-12">
