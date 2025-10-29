@@ -147,13 +147,13 @@ function Clashfinder() {
                 <TimeMarkers markers={timeMarkers} />
 
                 {/* Artist slots */}
-                {dayData.stages[stage]?.map((baybeatsSet, i) => {
+                {dayData.stages[stage]?.map((baybeatsSet) => {
                   return (
                     <BandSetButton
                       setBandSetCount={setBandSetCount}
                       refreshWorkaround={refreshWorkaround}
                       setRefreshWorkaround={setRefreshWorkaround}
-                      key={i}
+                      key={`${baybeatsSet.artist}-${stage}-${baybeatsSet.startTime}`}
                       baybeatsSet={baybeatsSet}
                       stage={stage as BaybeatsStage}
                       minTime={minTime}
