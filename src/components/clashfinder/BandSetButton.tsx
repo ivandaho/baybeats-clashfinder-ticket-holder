@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type ChangeEvent } from "react";
-import { isNeedTix, timeToMinutes } from "../../utils/clashfinder";
+import { addMinutes, isNeedTix, timeToMinutes } from "../../utils/clashfinder";
 import * as pdfjsLib from "pdfjs-dist";
 import workerUrl from "pdfjs-dist/build/pdf.worker.mjs?url";
 import {
@@ -31,10 +31,11 @@ const BandSetButton = ({
   stage,
   pixelsPerMinute,
 }: BandSetButtonProps) => {
-  const { time, artist, note } = baybeatsSet;
-  const startMinutes = timeToMinutes(time);
+  const { startTime, artist, note } = baybeatsSet;
+  const endTime = addMinutes(startTime, stage === "Concourse" ? 30 : 40);
+  const startMinutes = timeToMinutes(startTime);
   const topPosition = (startMinutes - minTime) * pixelsPerMinute;
-  const height = 45 * pixelsPerMinute; // 45 min set
+  const height = (stage === "Concourse" ? 30 : 40) * pixelsPerMinute; // 45 min set
 
   const inputRef = useRef<HTMLInputElement>(null);
   const [hasTix, setHasTix] = useState<boolean>(false);
@@ -65,7 +66,7 @@ const BandSetButton = ({
             const setMetadata = processPdfData(fullText, pdf.numPages);
             const success = await storeTicketPdf(file, setMetadata.bandName);
             if (success) {
-							// TODO
+              // TODO
               console.log("success");
             }
           } catch (error) {
@@ -115,12 +116,14 @@ const BandSetButton = ({
           height: `${height}px`,
         }}
       >
-        <div className="text-white font-bold text-xs mb-1">{time}</div>
+        <div className="text-white font-bold text-xs mb-1">
+          {startTime} - {endTime}
+        </div>
         <div className="text-white font-semibold text-sm leading-tight grow">
           {artist}
         </div>
         {note && (
-          <div className="text-white/80 text-xs italic mt-1 leading-tight">
+          <div className="text-white/80 text-xs italic leading-tight">
             {note}
           </div>
         )}

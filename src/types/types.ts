@@ -18,7 +18,7 @@ export type BaybeatsDay = "day_1" | "day_2" | "day_3" | "day_4";
 export type BaybeatsFestivalData = Record<BaybeatsDay, FestivalDay>;
 
 export type BaybeatsSet = {
-  time: string;
+  startTime: string;
   artist: string;
   note?: string;
 };

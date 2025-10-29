@@ -22,8 +22,8 @@ function Clashfinder() {
 
   stages.forEach((stage) => {
     dayData.stages[stage]?.forEach((baybeatsSet) => {
-      const startMinutes = timeToMinutes(baybeatsSet.time);
-      const endMinutes = startMinutes + 45; // 45 min set
+      const startMinutes = timeToMinutes(baybeatsSet.startTime);
+      const endMinutes = startMinutes + 45;
       minTime = Math.min(minTime, startMinutes);
       maxTime = Math.max(maxTime, endMinutes);
     });
@@ -44,13 +44,14 @@ function Clashfinder() {
     position: number;
   }[] = [];
 
-  for (let minutes = minTime; minutes <= maxTime; minutes += 60) {
+  for (let minutes = minTime; minutes <= maxTime; minutes += 30) {
     const hour = Math.floor(minutes / 60);
     const displayHour = hour > 12 ? hour - 12 : hour === 0 ? 12 : hour;
     const period = hour >= 12 ? "pm" : "am";
+    const isHour = minutes % 60 === 0;
     hourMarkers.push({
       minutes,
-      label: `${displayHour}${period}`,
+      label: isHour ? `${displayHour}${period}` : "",
       position: (minutes - minTime) * pixelsPerMinute,
     });
   }
@@ -88,10 +89,7 @@ function Clashfinder() {
       <div className="bg-fuchsia-950 backdrop-blur-sm rounded-xl px-2 max-w-[1200px]">
         <div className="flex gap-0">
           {/* Time column */}
-          <div
-            className="relative flex-shrink-0 w-8 mr-4"
-            style={{ top: "40px" }}
-          >
+          <div className="relative flex-shrink-0 w-8 mr-4 top-12">
             <div style={{ height: `${timelineHeight}px` }} className="relative">
               {hourMarkers.map((marker) => (
                 <div
