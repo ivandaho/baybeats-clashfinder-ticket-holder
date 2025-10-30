@@ -10,7 +10,7 @@ import { TimeMarkers } from "./TimeMarkers";
 import { useGetTimeRangeStuff } from "./useGetTimeRangeStuff";
 import { festival_schedule as festivalData } from "../../schedule.json";
 import { H4 } from "./H4";
-import { getStoredPdfCount } from "../../utils/pdf";
+import { getStoredPdfCount, removeAllPDFData } from "../../utils/pdf";
 import { getDefaultDay } from "../../utils/clashfinder";
 import { CurrentTime } from "./CurrentTime";
 
@@ -49,6 +49,33 @@ function Clashfinder() {
     localStorage.setItem("hideBanner", "hide");
     setHideBanner(true);
   };
+  const [counter, setCounter] = useState(0);
+
+  const onClick = () => {
+    setCounter((counter) => counter + 1);
+  };
+
+  useEffect(() => {
+    const fn = async () => {
+      if (counter >= 10) {
+        const d = window.prompt(
+          'type "DELETE" and submit to delete all data (no undo!)',
+        );
+        setCounter(0);
+
+        if (d === "DELETE") {
+          const result = await removeAllPDFData();
+          if (result) {
+            localStorage.clear();
+            setRefreshWorkaround(new Date().getTime());
+            setBandSetCount(0);
+            window.alert("data deleted");
+          }
+        }
+      }
+    };
+    fn();
+  }, [counter]);
 
   return (
     <div className="bg-gradient-to-br from-fuchsia-900 via-fuchsia-1000 to-fuchsia-1000 w-screen overflow-scroll h-screen">
@@ -63,7 +90,7 @@ function Clashfinder() {
               close banner
             </span>
           </h1>
-          <H4>
+          <H4 onClick={onClick}>
             Ticket management: Click <strong>any</strong> band slot to start
             storing tickets for <strong>any</strong> set, only on this device.
             You may select tickets for multiple sets at once.

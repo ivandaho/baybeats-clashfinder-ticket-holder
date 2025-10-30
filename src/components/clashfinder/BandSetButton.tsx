@@ -100,15 +100,10 @@ const BandSetButton = ({
 
   useEffect(() => {
     const initFn = async () => {
-      const artistSetTixCount = getArtistSetTixCount(artist);
-      // make sure pdf and tix count exists locally
       const pdfBlobUrl = await getPDFById(artist);
       const url = pdfBlobUrl ? URL.createObjectURL(pdfBlobUrl) : "#";
       setTicketBlobLink(url);
-      const hasPdfAndTixCount = !!pdfBlobUrl && artistSetTixCount > 0;
-      if (hasPdfAndTixCount) {
-        setTixCount(getArtistSetTixCount(artist));
-      }
+      setTixCount(getArtistSetTixCount(artist));
     };
     initFn();
   }, [artist, refreshWorkaround]);

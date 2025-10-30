@@ -92,6 +92,15 @@ export const getPDFById = async (id: string): Promise<Blob> => {
   return await dbPromise.get("pdf-files", getCleanBandName(id));
 };
 
+export const removeAllPDFData = async (): Promise<boolean> => {
+  try {
+    await dbPromise.clear("pdf-files");
+    return true;
+  } catch (e: any) {
+    return false;
+  }
+};
+
 export const getArtistSetTixCount = (artist: string): number => {
   return parseInt(localStorage.getItem(getCleanBandName(artist)) || "0");
 };
@@ -105,8 +114,6 @@ export const updateTixCountLSForArtist = (
   localStorage.setItem(cleanedArtistName, changeAmount.toString());
   const currentNum = parseInt(localStorage.getItem("tixCount") || "0");
   const newNum = currentNum + (changeAmount || 0);
-  console.log("currentNum: ", currentNum);
-  console.log("newNum: ", newNum);
   localStorage.setItem("tixCount", newNum.toString());
 };
 
