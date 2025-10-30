@@ -49,33 +49,21 @@ function Clashfinder() {
     localStorage.setItem("hideBanner", "hide");
     setHideBanner(true);
   };
-  const [counter, setCounter] = useState(0);
 
-  const onClick = () => {
-    setCounter((counter) => counter + 1);
-  };
-
-  useEffect(() => {
-    const fn = async () => {
-      if (counter >= 10) {
-        const d = window.prompt(
-          'type "DELETE" and submit to delete all data (no undo!)',
-        );
-        setCounter(0);
-
-        if (d === "DELETE") {
-          const result = await removeAllPDFData();
-          if (result) {
-            localStorage.clear();
-            setRefreshWorkaround(new Date().getTime());
-            setBandSetCount(0);
-            window.alert("data deleted");
-          }
-        }
+  const promptDelete = async () => {
+    const d = window.prompt(
+      'type "DELETE" and submit to delete all data (no undo!)',
+    );
+    if (d === "DELETE") {
+      const result = await removeAllPDFData();
+      if (result) {
+        localStorage.clear();
+        setRefreshWorkaround(new Date().getTime());
+        setBandSetCount(0);
+        window.alert("data deleted");
       }
-    };
-    fn();
-  }, [counter]);
+    }
+  };
 
   return (
     <div className="bg-gradient-to-br from-fuchsia-900 via-fuchsia-1000 to-fuchsia-1000 w-screen overflow-scroll h-screen">
@@ -90,7 +78,7 @@ function Clashfinder() {
               close banner
             </span>
           </h1>
-          <H4 onClick={onClick}>
+          <H4>
             Ticket management: Click <strong>any</strong> band slot to start
             storing tickets for <strong>any</strong> set, only on this device.
             You may select tickets for multiple sets at once.
@@ -119,6 +107,17 @@ function Clashfinder() {
               Code
             </a>
           </H4>
+          {tixCount && tixCount > 0 ? (
+            <H4
+              onClick={(e) => {
+                e.preventDefault();
+                promptDelete();
+              }}
+              className="!text-red-500 mt-2 text-[10px] cursor-pointer"
+            >
+              DELETE ALL DATA
+            </H4>
+          ) : null}
         </div>
       )}
       <div className="flex gap-3 text-nowrap py-2 pb-2 pt-8 overflow-x-auto">
