@@ -84,15 +84,15 @@ const deleteTicketPdf = async (id: string) => {
   }
 };
 
-export const getStoredPdfCount = async (): Promise<number> => {
+const getStoredPdfCount = async (): Promise<number> => {
   return await dbPromise.count("pdf-files");
 };
 
-export const getPDFById = async (id: string): Promise<Blob> => {
+const getPDFById = async (id: string): Promise<Blob> => {
   return await dbPromise.get("pdf-files", getCleanBandName(id));
 };
 
-export const removeAllPDFData = async (): Promise<boolean> => {
+const removeAllPDFData = async (): Promise<boolean> => {
   try {
     await dbPromise.clear("pdf-files");
     return true;
@@ -101,14 +101,11 @@ export const removeAllPDFData = async (): Promise<boolean> => {
   }
 };
 
-export const getArtistSetTixCount = (artist: string): number => {
+const getArtistSetTixCount = (artist: string): number => {
   return parseInt(localStorage.getItem(getCleanBandName(artist)) || "0");
 };
 
-export const updateTixCountLSForArtist = (
-  artist: string,
-  changeAmount: number,
-) => {
+const updateTixCountLSForArtist = (artist: string, changeAmount: number) => {
   // update artist set tix count and total tix count
   const cleanedArtistName = getCleanBandName(artist);
   localStorage.setItem(cleanedArtistName, changeAmount.toString());
@@ -117,7 +114,7 @@ export const updateTixCountLSForArtist = (
   localStorage.setItem("tixCount", newNum.toString());
 };
 
-export const removeArtistTixInfoFromLS = (artist: string) => {
+const removeArtistTixInfoFromLS = (artist: string) => {
   const cleanedArtistName = getCleanBandName(artist);
   const artistSetTixCount = localStorage.getItem(cleanedArtistName);
   console.log("cleanedArtistName: ", cleanedArtistName);
@@ -134,11 +131,17 @@ export const removeArtistTixInfoFromLS = (artist: string) => {
 };
 
 export {
-  processPdfData,
+  deleteTicketPdf,
+  getArtistSetTixCount,
   getBandName,
+  getPDFById,
   getSetDateTime,
   getStageLocation,
+  getStoredPdfCount,
   getTixCount,
+  processPdfData,
+  removeAllPDFData,
+  removeArtistTixInfoFromLS,
   storeTicketPdf,
-  deleteTicketPdf,
+  updateTixCountLSForArtist,
 };
