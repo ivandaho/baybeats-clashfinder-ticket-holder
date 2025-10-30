@@ -57,7 +57,7 @@ function Clashfinder() {
             Baybeats 2025 Clashfinder
             <span
               onClick={closeBanner}
-              className="p-2 text-[8px] h-20 w-20 text-center text-nowrap text-white/30 cursor-pointer"
+              className="p-2 text-[8px] h-20 w-20 text-center text-nowrap text-white/50 cursor-pointer"
             >
               close banner
             </span>
@@ -119,8 +119,8 @@ function Clashfinder() {
           </button>
         ) : null}
       </div>
-      <div className="rounded-xl px-2">
-        <div className="flex gap-0">
+      <div className="rounded-xl px-1">
+        <div className="flex gap-0 overflow-x-auto h-screen">
           {/* Time column */}
           <div className="relative flex-shrink-0 w-8 mr-4 top-12">
             <div style={{ height: `${timelineHeight}px` }} className="relative">
@@ -140,7 +140,7 @@ function Clashfinder() {
               <div
                 className="relative border-l-2 border-white/20 l-[-1px]"
                 style={{
-                  height: `${timelineHeight + 12}px`,
+                  height: `${timelineHeight + 75}px`,
                 }}
               >
                 {/* Hour grid lines */}
