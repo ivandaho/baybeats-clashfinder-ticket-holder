@@ -7,20 +7,15 @@ import {
   type SetStateAction,
 } from "react";
 import { addMinutes, isNeedTix, timeToMinutes } from "../../utils/clashfinder";
-import * as pdfjsLib from "pdfjs-dist";
-import workerUrl from "pdfjs-dist/build/pdf.worker.mjs?url";
 import {
   getArtistSetTixCount,
   getPDFById,
-  processPdfData,
-  storeTicketPdf,
-  updateTixCountLSForArtist,
+  readFilesAsyncish,
+  saveTixPerBand,
 } from "../../utils/pdf";
 import cx from "classnames";
 import type { BaybeatsSet, BaybeatsStage } from "../../types/types";
 import { TixBadge } from "./TixBadge";
-
-pdfjsLib.GlobalWorkerOptions.workerSrc = workerUrl;
 
 const haveTixClass = "from-indigo-900";
 const noTixClass = "from-pink-500";
@@ -58,43 +53,13 @@ const BandSetButton = ({
   const handleFileChange = async (event: ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
     if (!files) return;
-
-    for (const file of files) {
-      const reader = new FileReader();
-      reader.onload = async (e) => {
-        if (e.target?.result) {
-          try {
-            const loadingTask = pdfjsLib.getDocument(
-              e.target.result as ArrayBuffer,
-            );
-            const pdf = await loadingTask.promise;
-            let fullText = "";
-            for (let i = 1; i <= pdf.numPages; i++) {
-              const page = await pdf.getPage(i);
-              const textContent = await page.getTextContent();
-              const pageText = textContent.items
-                .map((item) => (item as any).str)
-                .join(" ");
-              fullText += pageText;
-            }
-
-            const setMetadata = processPdfData(fullText, pdf.numPages);
-            const success = await storeTicketPdf(file, setMetadata.bandName);
-            updateTixCountLSForArtist(
-              setMetadata.bandName,
-              setMetadata.tixCount,
-            );
-            if (success) {
-              setBandSetCount((c) => (c || 0) + 1);
-              setRefreshWorkaround(new Date().getTime());
-            }
-          } catch (error) {
-            console.error("Error processing PDF:", error);
-          }
-        }
-      };
-
-      reader.readAsArrayBuffer(file);
+    // const result = await consolidatePDFs(files);
+    const result = await readFilesAsyncish(files);
+    // console.log("result: ", result);
+    const re = await saveTixPerBand(result);
+    console.log("re: ", re);
+    if (re) {
+      setRefreshWorkaround(new Date().getTime());
     }
   };
 

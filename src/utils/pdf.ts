@@ -1,5 +1,10 @@
 import { openDB } from "idb";
+import * as pdfjsLib from "pdfjs-dist";
+import workerUrl from "pdfjs-dist/build/pdf.worker.mjs?url";
 import type { BaybeatsStage, SetMetadata } from "../types/types";
+import { PDFDocument } from "pdf-lib";
+
+pdfjsLib.GlobalWorkerOptions.workerSrc = workerUrl;
 
 const dbPromise = await openDB("pdf-files", 1, {
   upgrade(db) {
@@ -130,6 +135,88 @@ const removeArtistTixInfoFromLS = (artist: string) => {
   localStorage.removeItem(cleanedArtistName);
 };
 
+const readFilesAsyncish = async (files: FileList) => {
+  return new Promise<FileObjectMap2>((resolve, reject) => {
+    const obj: FileObjectMap2 = {};
+    let index = 0;
+    for (const file of files) {
+      let reader = new FileReader();
+
+      reader.onload = async () => {
+        console.log("reader.result: ", reader.result);
+        // read pdf, store info, whatever
+        const loadingTask = pdfjsLib.getDocument(reader.result as ArrayBuffer);
+        const pdf = await loadingTask.promise;
+
+        let fullText = "";
+
+        for (let i = 1; i <= pdf.numPages; i++) {
+          const page = await pdf.getPage(i);
+          const textContent = await page.getTextContent();
+          const pageText = textContent.items
+            .map((item) => (item as any).str)
+            .join(" ");
+          fullText += pageText;
+        }
+
+        const setMetadata = processPdfData(fullText, pdf.numPages);
+
+        if (!obj[setMetadata.bandName]) {
+          console.log("trig 1");
+          obj[setMetadata.bandName] = [{ setMetadata, tix: file }];
+        } else {
+          console.log("trig 2");
+          console.log("file: ", file);
+          obj[setMetadata.bandName] = [
+            ...obj[setMetadata.bandName],
+            { setMetadata, tix: file },
+          ];
+        }
+        index++;
+        if (index >= files.length) {
+          resolve(obj);
+        }
+      };
+      reader.onerror = reject;
+      reader.readAsArrayBuffer(file);
+    }
+  });
+};
+
+type FileObjectMap2 = {
+  [x: string]: { setMetadata: SetMetadata; tix: File }[];
+};
+
+const saveTixPerBand = async (obj: FileObjectMap2) => {
+  const items = Object.entries(obj);
+  for (const [bandName, tixInfos] of items) {
+    const combinedPdf = await PDFDocument.create();
+    let totalTixInPdfs = 0;
+    await Promise.all(
+      tixInfos.map(async ({ setMetadata, tix }) => {
+        if (!tix) return;
+        // Read the file as ArrayBuffer
+        const arrayBuffer = await tix.arrayBuffer();
+        // Load the PDF
+        const pdf = await PDFDocument.load(arrayBuffer);
+        // Copy all pages from this PDF
+        const pages = await combinedPdf.copyPages(pdf, pdf.getPageIndices());
+        // Add each page to the combined PDF
+        pages.forEach((page) => combinedPdf.addPage(page));
+        totalTixInPdfs += setMetadata.tixCount;
+      }),
+    );
+    const combinedPdfBytes = await combinedPdf.save();
+    const combinedFile = new File([combinedPdfBytes as any], "combined.pdf", {
+      type: "application/pdf",
+    });
+    await storeTicketPdf(combinedFile, bandName);
+
+    updateTixCountLSForArtist(bandName, totalTixInPdfs);
+    return true;
+  }
+};
+
 export {
   deleteTicketPdf,
   getArtistSetTixCount,
@@ -140,8 +227,10 @@ export {
   getStoredPdfCount,
   getTixCount,
   processPdfData,
+  readFilesAsyncish,
   removeAllPDFData,
   removeArtistTixInfoFromLS,
+  saveTixPerBand,
   storeTicketPdf,
   updateTixCountLSForArtist,
 };
