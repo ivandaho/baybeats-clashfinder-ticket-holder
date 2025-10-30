@@ -12,6 +12,7 @@ import { festival_schedule as festivalData } from "../../schedule.json";
 import { H4 } from "./H4";
 import { getStoredPdfCount } from "../../utils/pdf";
 import { getDefaultDay } from "../../utils/clashfinder";
+import { CurrentTime } from "./CurrentTime";
 
 const typedFestivalData: BaybeatsFestivalData = festivalData;
 
@@ -93,7 +94,7 @@ function Clashfinder() {
           </H4>
         </div>
       )}
-      <div className="flex gap-3 text-nowrap py-2 px-2 overflow-x-auto">
+      <div className="flex gap-3 text-nowrap py-2 pb-2 pt-8 overflow-x-auto">
         {(Object.keys(typedFestivalData) as BaybeatsDay[]).map((day) => (
           <button
             key={day}
@@ -134,6 +135,10 @@ function Clashfinder() {
               key={stage}
               className="flex-1 min-w-[120px] max-w-[240px] bg-fuchsia-950 backdrop-blur-sm"
             >
+              <CurrentTime
+                pixelsPerMinute={pixelsPerMinute}
+                minTime={minTime}
+              />
               <div className="bg-fuchsia-950 text-white font-bold text-center mb-4 p-2 border-b-2 border-white/30 text-nowrap truncate sticky top-0 z-11">
                 {stage}
               </div>
