@@ -11,7 +11,11 @@ import { TimeMarkers } from "./TimeMarkers";
 import { useGetTimeRangeStuff } from "./useGetTimeRangeStuff";
 import { festival_schedule as festivalData } from "../../schedule.json";
 import { H4 } from "./H4";
-import { getStoredPdfCount, removeAllPDFData } from "../../utils/pdf";
+import {
+  getStoredPdfCount,
+  migrateLegacyData,
+  removeAllPDFData,
+} from "../../utils/pdf";
 import { getDefaultDay } from "../../utils/clashfinder";
 import { CurrentTime } from "./CurrentTime";
 
@@ -34,6 +38,7 @@ function Clashfinder() {
     localStorage.getItem("hideBanner") === "hide",
   );
   const [tixCount, setTixCount] = useState<null | number>(null);
+  const [isMigrating, setIsMigrating] = useState<boolean>(true);
 
   useEffect(() => {
     const fn = async () => {
@@ -44,17 +49,57 @@ function Clashfinder() {
 
   useEffect(() => {
     let tixCounter = 0;
-    for (let i = 0; i < localStorage.length; i++) {
-      const data: UniqTixCountFormat[] = JSON.parse(
-        localStorage.getItem(localStorage.key(i) || "") || "",
-      );
-      data.forEach((d) => {
-        tixCounter += d.tixCount;
-      });
+    const migrationCheck = async () => {
+      let isOldVersion = false;
+      if (localStorage.getItem("hasMigrated") === "true") {
+        setIsMigrating(false);
+      } else {
+        for (let i = 0; i < localStorage.length; i++) {
+          const key = localStorage.key(i);
+          if (key === "hideBanner" || key === "hasMigrated") {
+            continue;
+          }
+          const dataFromLS = localStorage.getItem(key || "");
+          if (typeof dataFromLS === "string" && parseInt(dataFromLS)) {
+            isOldVersion = true;
+            break;
+          }
+        }
+      }
+
+      if (isOldVersion) {
+        await migrateLegacyData();
+        localStorage.setItem("hasMigrated", "true");
+        setIsMigrating(false);
+      } else {
+        setIsMigrating(false);
+      }
+    };
+    migrationCheck();
+
+    if (!isMigrating) {
+      let setCount = 0;
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key === "hideBanner" || key === "hasMigrated") {
+          continue;
+        }
+        try {
+          setCount++;
+          const data: UniqTixCountFormat[] = JSON.parse(
+            localStorage.getItem(key || "") || "",
+          );
+          data.forEach((d) => {
+            tixCounter += d.tixCount;
+          });
+        } catch (e) {
+          // ignore
+        }
+      }
+      setTixCount(tixCounter);
+      setBandSetCount(setCount);
     }
-    setTixCount(tixCounter);
-    setBandSetCount(localStorage.length);
-  }, [refreshWorkaround]);
+  }, [refreshWorkaround, isMigrating]);
 
   const closeBanner = () => {
     localStorage.setItem("hideBanner", "hide");
@@ -75,6 +120,14 @@ function Clashfinder() {
       }
     }
   };
+
+  if (isMigrating) {
+    return (
+      <div className="bg-gradient-to-br from-fuchsia-900 via-fuchsia-1000 to-fuchsia-1000 w-screen overflow-scroll h-screen text-white p-4">
+        <H4>Migrating data...</H4>
+      </div>
+    );
+  }
 
   return (
     <div className="bg-gradient-to-br from-fuchsia-900 via-fuchsia-1000 to-fuchsia-1000 w-screen overflow-scroll h-screen">

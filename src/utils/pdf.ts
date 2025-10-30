@@ -283,6 +283,36 @@ const saveTixPerBand = async (obj: FileObjectMap2) => {
   return true;
 };
 
+const migrateLegacyData = async () => {
+  const allDbKeys = await dbPromise.getAllKeys("pdf-files");
+  for (const key of allDbKeys) {
+    const pdfBlob = await dbPromise.get("pdf-files", key);
+    if (!pdfBlob) {
+      continue;
+    }
+    const loadingTask = pdfjsLib.getDocument(await pdfBlob.arrayBuffer());
+    const pdf = await loadingTask.promise;
+
+    let fullText = "";
+
+    for (let i = 1; i <= pdf.numPages; i++) {
+      const page = await pdf.getPage(i);
+      const textContent = await page.getTextContent();
+      const pageText = textContent.items
+        .map((item) => (item as any).str)
+        .join(" ");
+      fullText += pageText;
+    }
+
+    const setMetadata = processPdfData(fullText, pdf.numPages);
+    const { bandName, tixCount, transactionNumber } = setMetadata;
+    const cleanedBandName = getCleanBandName(bandName);
+    const newLSValue = [{ tixCount, transactionNumber }];
+    localStorage.setItem(cleanedBandName, JSON.stringify(newLSValue));
+  }
+  localStorage.removeItem("tixCount");
+};
+
 export {
   deleteTicketPdf,
   getArtistSetTixCount,
@@ -299,4 +329,5 @@ export {
   saveTixPerBand,
   storeTicketPdf,
   getArtistTixInfoFromLS,
+  migrateLegacyData,
 };
