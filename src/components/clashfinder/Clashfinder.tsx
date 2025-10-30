@@ -106,6 +106,9 @@ function Clashfinder() {
             storing tickets for <strong>any</strong> set, only on this device.
             You may select tickets for multiple sets at once.
           </H4>
+          <H4>
+            <strong>now supporting multiple pdf downloads.</strong>
+          </H4>
           <H4>Everything runs locally, nothing is uploaded.</H4>
           <H4>
             Tickets required only for performances at Powerhouse and Annexe.
