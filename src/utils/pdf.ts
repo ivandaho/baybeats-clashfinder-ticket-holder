@@ -134,6 +134,23 @@ const getArtistSetTixCount = (artist: string): number => {
   return tixCounter;
 };
 
+const getArtistTixInfoFromLS = (artist: string): UniqTixCountFormat[] => {
+  const cleanedArtistName = getCleanBandName(artist);
+  const item = localStorage.getItem(cleanedArtistName);
+  if (!item) {
+    return [];
+  }
+  try {
+    const parsedItem = JSON.parse(item);
+    if (Array.isArray(parsedItem)) {
+      return parsedItem;
+    }
+  } catch (e) {
+    // ignore invalid json
+  }
+  return [];
+};
+
 const updateTixCountLSForArtist = (
   artist: string,
   tixCount: UniqTixCountFormat[],
@@ -201,10 +218,42 @@ type FileObjectMap2 = {
 const saveTixPerBand = async (obj: FileObjectMap2) => {
   const items = Object.entries(obj);
   for (const [bandName, tixInfos] of items) {
+    // de-duplicate the uploaded batch first
+    const uniqueTixInfosInUpload = Array.from(
+      tixInfos
+        .reduce((map, item) => {
+          map.set(item.setMetadata.transactionNumber, item);
+          return map;
+        }, new Map())
+        .values(),
+    );
+
+    const existingTixInfo = getArtistTixInfoFromLS(bandName);
+    const existingTixInfoTxNumbers = existingTixInfo.map(
+      (t) => t.transactionNumber,
+    );
+    const newTixInfo = uniqueTixInfosInUpload.filter(
+      (t) =>
+        !existingTixInfoTxNumbers.includes(t.setMetadata.transactionNumber),
+    );
+
+    if (newTixInfo.length === 0) {
+      continue;
+    }
+
     const combinedPdf = await PDFDocument.create();
-    let tixCount: { transactionNumber: string; tixCount: number }[] = [];
+    const existingPdfBlob = await getPDFById(bandName);
+    if (existingPdfBlob) {
+      const pdf = await PDFDocument.load(await existingPdfBlob.arrayBuffer());
+      const pages = await combinedPdf.copyPages(pdf, pdf.getPageIndices());
+      pages.forEach((page) => combinedPdf.addPage(page));
+    }
+
+    let tixCount: { transactionNumber: string; tixCount: number }[] = [
+      ...existingTixInfo,
+    ];
     await Promise.all(
-      tixInfos.map(async ({ setMetadata, tix }) => {
+      newTixInfo.map(async ({ setMetadata, tix }) => {
         if (!tix) return;
         // Read the file as ArrayBuffer
         const arrayBuffer = await tix.arrayBuffer();
@@ -249,4 +298,5 @@ export {
   removeArtistTixInfoFromLS,
   saveTixPerBand,
   storeTicketPdf,
+  getArtistTixInfoFromLS,
 };
