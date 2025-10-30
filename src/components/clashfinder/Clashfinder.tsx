@@ -134,6 +134,7 @@ function Clashfinder() {
             <div
               key={stage}
               className="flex-1 min-w-[120px] max-w-[240px] bg-fuchsia-950 backdrop-blur-sm"
+              style={{ height: `${timelineHeight + 134}px` }} // huh?
             >
               <CurrentTime
                 pixelsPerMinute={pixelsPerMinute}
