@@ -51,7 +51,7 @@ function Clashfinder() {
   };
 
   return (
-    <div className="bg-gradient-to-br rounded-lg from-fuchsia-900 via-fuchsia-1000 to-fuchsia-1000 w-screen overflow-scroll h-screen">
+    <div className="bg-gradient-to-br from-fuchsia-900 via-fuchsia-1000 to-fuchsia-1000 w-screen overflow-scroll h-screen">
       {hideBanner ? null : (
         <div className="pl-1">
           <h1 className="text-4xl font-bold text-white mt-4 flex">
