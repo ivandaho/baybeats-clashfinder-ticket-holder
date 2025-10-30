@@ -1,7 +1,11 @@
 import { openDB } from "idb";
 import * as pdfjsLib from "pdfjs-dist";
 import workerUrl from "pdfjs-dist/build/pdf.worker.mjs?url";
-import type { BaybeatsStage, SetMetadata } from "../types/types";
+import type {
+  BaybeatsStage,
+  SetMetadata,
+  UniqTixCountFormat,
+} from "../types/types";
 import { PDFDocument } from "pdf-lib";
 
 pdfjsLib.GlobalWorkerOptions.workerSrc = workerUrl;
@@ -22,12 +26,15 @@ const bandSetDateTimeRegexp = new RegExp(
   /\d\d-[A-Z]\w\w-\d\d\d\d \d\d:\d\d (AM|PM)/,
 );
 
+const transNumRegExp = new RegExp(/(\d{8}-\d{6})/g);
+
 const processPdfData = (fullText: string, numPages: number): SetMetadata => {
   return {
     bandName: getBandName(fullText),
     bandSetDateTime: getSetDateTime(fullText),
     stageLocation: getStageLocation(fullText),
     tixCount: getTixCount(numPages),
+    transactionNumber: getTransNums(fullText),
   };
 };
 
@@ -60,6 +67,13 @@ const getStageLocation = (fullText: string): BaybeatsStage => {
 
 const getTixCount = (numPages: number): number => {
   return Math.floor(numPages / 2);
+};
+
+// returns the transaction number for the pdf file ticket
+const getTransNums = (fullText: string): string => {
+  const matches = [...fullText.matchAll(transNumRegExp)];
+
+  return matches.map((match) => match[0])[0];
 };
 
 const countryRegexp = new RegExp(/\(\w\w\)$/);
@@ -107,31 +121,31 @@ const removeAllPDFData = async (): Promise<boolean> => {
 };
 
 const getArtistSetTixCount = (artist: string): number => {
-  return parseInt(localStorage.getItem(getCleanBandName(artist)) || "0");
+  let tixCounter = 0;
+  let data: UniqTixCountFormat[] = [];
+  try {
+    data = JSON.parse(localStorage.getItem(getCleanBandName(artist)) || "");
+  } catch (e) {
+    // invalid data
+  }
+  data.forEach((d) => {
+    tixCounter += d.tixCount;
+  });
+  return tixCounter;
 };
 
-const updateTixCountLSForArtist = (artist: string, changeAmount: number) => {
+const updateTixCountLSForArtist = (
+  artist: string,
+  tixCount: UniqTixCountFormat[],
+) => {
   // update artist set tix count and total tix count
   const cleanedArtistName = getCleanBandName(artist);
-  localStorage.setItem(cleanedArtistName, changeAmount.toString());
-  const currentNum = parseInt(localStorage.getItem("tixCount") || "0");
-  const newNum = currentNum + (changeAmount || 0);
-  localStorage.setItem("tixCount", newNum.toString());
+  JSON.stringify(tixCount);
+  localStorage.setItem(cleanedArtistName, JSON.stringify(tixCount));
 };
 
 const removeArtistTixInfoFromLS = (artist: string) => {
   const cleanedArtistName = getCleanBandName(artist);
-  const artistSetTixCount = localStorage.getItem(cleanedArtistName);
-  console.log("cleanedArtistName: ", cleanedArtistName);
-  console.log("artistSetTixCount: ", artistSetTixCount);
-  localStorage.setItem(
-    "tixCount",
-    (
-      parseInt(localStorage.getItem("tixCount") || "0") -
-      parseInt(artistSetTixCount || "0")
-    ).toString(),
-  );
-
   localStorage.removeItem(cleanedArtistName);
 };
 
@@ -162,11 +176,8 @@ const readFilesAsyncish = async (files: FileList) => {
         const setMetadata = processPdfData(fullText, pdf.numPages);
 
         if (!obj[setMetadata.bandName]) {
-          console.log("trig 1");
           obj[setMetadata.bandName] = [{ setMetadata, tix: file }];
         } else {
-          console.log("trig 2");
-          console.log("file: ", file);
           obj[setMetadata.bandName] = [
             ...obj[setMetadata.bandName],
             { setMetadata, tix: file },
@@ -191,7 +202,7 @@ const saveTixPerBand = async (obj: FileObjectMap2) => {
   const items = Object.entries(obj);
   for (const [bandName, tixInfos] of items) {
     const combinedPdf = await PDFDocument.create();
-    let totalTixInPdfs = 0;
+    let tixCount: { transactionNumber: string; tixCount: number }[] = [];
     await Promise.all(
       tixInfos.map(async ({ setMetadata, tix }) => {
         if (!tix) return;
@@ -203,7 +214,13 @@ const saveTixPerBand = async (obj: FileObjectMap2) => {
         const pages = await combinedPdf.copyPages(pdf, pdf.getPageIndices());
         // Add each page to the combined PDF
         pages.forEach((page) => combinedPdf.addPage(page));
-        totalTixInPdfs += setMetadata.tixCount;
+        tixCount = [
+          ...tixCount,
+          {
+            transactionNumber: setMetadata.transactionNumber,
+            tixCount: setMetadata.tixCount,
+          },
+        ];
       }),
     );
     const combinedPdfBytes = await combinedPdf.save();
@@ -212,9 +229,9 @@ const saveTixPerBand = async (obj: FileObjectMap2) => {
     });
     await storeTicketPdf(combinedFile, bandName);
 
-    updateTixCountLSForArtist(bandName, totalTixInPdfs);
-    return true;
+    updateTixCountLSForArtist(bandName, tixCount);
   }
+  return true;
 };
 
 export {
@@ -232,5 +249,4 @@ export {
   removeArtistTixInfoFromLS,
   saveTixPerBand,
   storeTicketPdf,
-  updateTixCountLSForArtist,
 };

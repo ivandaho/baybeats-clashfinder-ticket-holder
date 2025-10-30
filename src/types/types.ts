@@ -3,6 +3,7 @@ export type SetMetadata = {
   bandSetDateTime: Date;
   stageLocation: string;
   tixCount: number;
+	transactionNumber: string;
 };
 
 export type BaybeatsStage =
@@ -34,3 +35,4 @@ export type TimeMarker = {
     displayHour: number;
     period: string;
   }
+	export type UniqTixCountFormat =  { transactionNumber: string; tixCount: number }

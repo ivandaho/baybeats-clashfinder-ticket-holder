@@ -4,6 +4,7 @@ import type {
   BaybeatsDay,
   BaybeatsFestivalData,
   BaybeatsStage,
+  UniqTixCountFormat,
 } from "../../types/types";
 import { TimeColumn } from "./TimeColumn";
 import { TimeMarkers } from "./TimeMarkers";
@@ -42,7 +43,17 @@ function Clashfinder() {
   }, []);
 
   useEffect(() => {
-    setTixCount(parseInt(localStorage.getItem("tixCount") || "0"));
+    let tixCounter = 0;
+    for (let i = 0; i < localStorage.length; i++) {
+      const data: UniqTixCountFormat[] = JSON.parse(
+        localStorage.getItem(localStorage.key(i) || "") || "",
+      );
+      data.forEach((d) => {
+        tixCounter += d.tixCount;
+      });
+    }
+    setTixCount(tixCounter);
+    setBandSetCount(localStorage.length);
   }, [refreshWorkaround]);
 
   const closeBanner = () => {

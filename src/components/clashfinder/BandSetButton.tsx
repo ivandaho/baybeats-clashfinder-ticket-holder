@@ -55,9 +55,7 @@ const BandSetButton = ({
     if (!files) return;
     // const result = await consolidatePDFs(files);
     const result = await readFilesAsyncish(files);
-    // console.log("result: ", result);
     const re = await saveTixPerBand(result);
-    console.log("re: ", re);
     if (re) {
       setRefreshWorkaround(new Date().getTime());
     }
