@@ -6,7 +6,6 @@ import type {
   SetMetadata,
   UniqTixCountFormat,
 } from "../types/types";
-import { PDFDocument } from "pdf-lib";
 
 pdfjsLib.GlobalWorkerOptions.workerSrc = workerUrl;
 
@@ -216,6 +215,7 @@ type FileObjectMap2 = {
 };
 
 const saveTixPerBand = async (obj: FileObjectMap2) => {
+  const { PDFDocument } = await import("pdf-lib");
   const items = Object.entries(obj);
   for (const [bandName, tixInfos] of items) {
     // de-duplicate the uploaded batch first
