@@ -66,7 +66,8 @@ const addMinutes = (timeStr: string, minutesToAdd: number) => {
   }
 };
 
-const getDefaultDay = (): BaybeatsDay => {
+/** returns the corresponding baybeats day based on today's date number*/
+const getTodayBaybeatsDay = (): BaybeatsDay => {
   const d = new Date().getDate();
   switch (d) {
     case 30:
@@ -81,4 +82,4 @@ const getDefaultDay = (): BaybeatsDay => {
   }
 };
 
-export { addMinutes, timeToMinutes, isNeedTix, getDefaultDay };
+export { addMinutes, timeToMinutes, isNeedTix, getTodayBaybeatsDay };

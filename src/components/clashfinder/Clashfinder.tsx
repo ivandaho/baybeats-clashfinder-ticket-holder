@@ -16,14 +16,16 @@ import {
   migrateLegacyData,
   removeAllPDFData,
 } from "../../utils/pdf";
-import { getDefaultDay } from "../../utils/clashfinder";
+import { getTodayBaybeatsDay } from "../../utils/clashfinder";
 import { CurrentTime } from "./CurrentTime";
 
 const typedFestivalData: BaybeatsFestivalData = festivalData;
 
 function Clashfinder() {
-  const [selectedDay, setSelectedDay] = useState<BaybeatsDay>(getDefaultDay());
+  const todayBaybeatsDay = getTodayBaybeatsDay();
+  const [selectedDay, setSelectedDay] = useState<BaybeatsDay>(todayBaybeatsDay);
   const [refreshWorkaround, setRefreshWorkaround] = useState<number>(0);
+  const showCurrentTime = selectedDay === todayBaybeatsDay;
 
   const {
     timelineHeight,
@@ -229,10 +231,12 @@ function Clashfinder() {
               className="flex-1 min-w-[120px] max-w-[240px] bg-fuchsia-950 backdrop-blur-sm"
               style={{ height: `${timelineHeight + 134}px` }} // huh?
             >
-              <CurrentTime
-                pixelsPerMinute={pixelsPerMinute}
-                minTime={minTime}
-              />
+              {showCurrentTime && (
+                <CurrentTime
+                  pixelsPerMinute={pixelsPerMinute}
+                  minTime={minTime}
+                />
+              )}
               <div className="bg-fuchsia-950 text-white font-bold text-center mb-4 p-2 border-b-2 border-white/30 text-nowrap truncate sticky top-0 z-11">
                 {stage}
               </div>
