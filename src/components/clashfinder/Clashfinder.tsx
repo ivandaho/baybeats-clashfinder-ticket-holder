@@ -16,10 +16,12 @@ import {
   migrateLegacyData,
   removeAllPDFData,
 } from "../../utils/pdf";
-import { getTodayBaybeatsDay } from "../../utils/clashfinder";
+import { debounce, getTodayBaybeatsDay } from "../../utils/clashfinder";
 import { CurrentTime } from "./CurrentTime";
 
 const typedFestivalData: BaybeatsFestivalData = festivalData;
+
+const offset = -10; // huh ???
 
 function Clashfinder() {
   const todayBaybeatsDay = getTodayBaybeatsDay();
@@ -41,6 +43,7 @@ function Clashfinder() {
   );
   const [tixCount, setTixCount] = useState<null | number>(null);
   const [isMigrating, setIsMigrating] = useState<boolean>(true);
+  const [currentTimePos, setCurrentTimePos] = useState(-1);
 
   useEffect(() => {
     const fn = async () => {
@@ -103,6 +106,10 @@ function Clashfinder() {
     }
   }, [refreshWorkaround, isMigrating]);
 
+  useEffect(() => {
+    calculateCurrentTimePos();
+  }, []);
+
   const closeBanner = () => {
     localStorage.setItem("hideBanner", "hide");
     setHideBanner(true);
@@ -123,6 +130,15 @@ function Clashfinder() {
     }
   };
 
+  const calculateCurrentTimePos = () => {
+    const d = new Date();
+    let dHours = d.getHours();
+    const dMinutes = d.getMinutes() + 5;
+    const minutes = dHours * 60 + dMinutes;
+    const newPos = (minutes - minTime) * pixelsPerMinute + 60 + offset;
+    setCurrentTimePos(newPos);
+  };
+
   if (isMigrating) {
     return (
       <div className="bg-gradient-to-br from-fuchsia-900 via-fuchsia-1000 to-fuchsia-1000 w-screen overflow-scroll h-screen text-white p-4">
@@ -130,6 +146,10 @@ function Clashfinder() {
       </div>
     );
   }
+
+  const debounced = debounce(() => {
+    calculateCurrentTimePos();
+  }, 1000);
 
   return (
     <div className="bg-gradient-to-br from-fuchsia-900 via-fuchsia-1000 to-fuchsia-1000 w-screen overflow-scroll h-screen">
@@ -216,7 +236,10 @@ function Clashfinder() {
         ) : null}
       </div>
       <div className="rounded-xl px-1">
-        <div className="flex gap-0 overflow-x-auto h-screen">
+        <div
+          className="flex gap-0 overflow-x-auto h-screen"
+          onScrollEnd={debounced}
+        >
           {/* Time column */}
           <div className="relative flex-shrink-0 w-8 mr-4 top-12">
             <div style={{ height: `${timelineHeight}px` }} className="relative">
@@ -231,12 +254,7 @@ function Clashfinder() {
               className="flex-1 min-w-[120px] max-w-[240px] bg-fuchsia-950 backdrop-blur-sm"
               style={{ height: `${timelineHeight + 134}px` }} // huh?
             >
-              {showCurrentTime && (
-                <CurrentTime
-                  pixelsPerMinute={pixelsPerMinute}
-                  minTime={minTime}
-                />
-              )}
+              {showCurrentTime && <CurrentTime pos={currentTimePos} />}
               <div className="bg-fuchsia-950 text-white font-bold text-center mb-4 p-2 border-b-2 border-white/30 text-nowrap truncate sticky top-0 z-11">
                 {stage}
               </div>
