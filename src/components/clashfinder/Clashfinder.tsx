@@ -238,7 +238,7 @@ function Clashfinder() {
       <div className="rounded-xl px-1">
         <div
           className="flex gap-0 overflow-x-auto h-screen"
-          onScrollEnd={debounced}
+          onScroll={debounced}
         >
           {/* Time column */}
           <div className="relative flex-shrink-0 w-8 mr-4 top-12">
