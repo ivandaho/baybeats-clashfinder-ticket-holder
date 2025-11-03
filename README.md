@@ -1,73 +1,85 @@
-# React + TypeScript + Vite
+# Baybeats 2025 Clashfinder + Ticket Holder
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Clashfinder + ticket holder web app for Baybeats 2025, a music festival held yearly in Singapore. works offline as a PWA and keeps all data stored locally in the user's browser
 
-Currently, two official plugins are available:
+[https://baybeats-clashfinder-ticket-holder.vercel.app/](https://baybeats-clashfinder-ticket-holder.vercel.app/)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- `npm run dev` to run locally
 
-## React Compiler
+## Features
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **Clashfinder**:
+  - Proportionately sized clashfinder that displays venues, set times, and number of tickets stored per set
+  - data driven instead of hardcoded, based on a specified JSON schema, so changes to the schedule (fingers crossed) can be easily made
+  - If loaded during festival dates, defaults to the current day on page load
+  - A "current time" indicator, updates on scroll
+- **Ticket Storage**:
+  - Bulk upload and store ticket PDFs in IndexedDB
+  - De-duplicates and combines PDFs for each set for easy access
+  - this way, you only need to open one PDF file, just scroll down to each ticket's barcode for the staff to scan, instead of opening multiple PDFs from each purchase
+  - Allows for the removal of tickets on a per-set basis
+- **Runs Locally**:
+  - Everything is processed and stored locally; no data is uploaded
+  - Works as a PWA, even without an active internet connection
 
-## Expanding the ESLint configuration
+## Tech Stack
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+Built with the following:
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+- React with Vite and TypeScript
+- Tailwind CSS
+- **Local Storage**:
+  - IndexedDB for storing PDF files, managed with `idb` library
+  - `localStorage` for storing ticket metadata
+- **PDF Handling**:
+  - `pdf-lib` for combining PDF files
+  - `pdf.js` for parsing and extracting text from PDF files
+- **Other**:
+  - ESLint
+  - Vite PWA Plugin
+  - Hosted with Vercel via this GitHub repo
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## Project
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+### Users
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+- possibly a few hundred total users, based on limited stats from Vercel
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+### Timeline
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+| Festival Day | event                                                                                                                                                                                                                                                            |
+| ------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| -1 day       | Implemented first version that supported multiple PDFs at once, however no de-duplication yet                                                                                                                                                                    |
+| 1            | Add some QOL features and small tweaks. Realised that I need to implement bulk upload and de-duplication of PDFs, as that is likely the most useful feature                                                                                                      |
+| 2            | It occured to me to check light mode implementation. Of course, it was bugged from the start                                                                                                                                                                     |
+| 3            | Tried to rush a fix to make the Current Time indicator update automatically over time. Added handle to `onScrollEnd`, but turns out this isn't implemented in Safari and Safari iOS, which I only discovered later on my device. Reverted to a previous version. |
+| 4            | Added a way to check for version (first time attempting PWA, and not sure how updates would work). move the handle to `onScroll` for compatibility.                                                                                                              |
+
+## Retrospective
+
+### What could be improved:
+
+- **Code Quality and Refactoring**:
+  - `Clashfinder.tsx` component could be refactored and broken down into smaller components
+  - `pdf.ts` could be split into smaller modules based on functionality (e.g., `pdf-parsing.ts`, `db.ts`, `local-storage.ts`), nearing the end of this short dev cycle, it became a dump for _any_ util function
+  - figure out "magic numbers" and/or specify them as constants
+- **State Management**:
+  - currently a bit all over the place, could be better managed, perhaps with a state management library like Zustand
+- **Debounce Implementation**:
+  - The current `debounce` function triggers _after_ the specified delay, but a "leading" debounce that triggers the function on the first call would allow for a more responsive UX
+- **UI/UX**:
+  - **Scrolling**: Improve overflow and sticky behavior
+  - **Long Band Names**: Handle long band names more gracefully, maybe truncate them with an ellipsis and show the full name on hover or long press
+  - **Error Handling**: More robust error handling e.g. if a PDF fails to parse, or if the PDF is missing in IndexedDB during retrieval
+  - **Bundle Size**: pdf-lib has quite a large bundle size, given that the only functionality used in that library for this app is to combine PDF files, it might be possible to reduce the final bundle size
+
+### Other possible features:
+
+- **Highlight/Mute Bands**: A feature to allow users to "highlight" bands they want to watch and "mute" bands they want to skip
+- **Schedule Sharing**: Allow users to share their highlighted schedules with friends via URL with query params or QR code
+- **Notifications**: Push notifications for upcoming sets
+- **Artist Info**: link to artist/set information
+
+## Disclaimer
+
+- there were some use of AI coding tools in this project, namely the initial ClashFinder code, a function to format dates (I didn't want to add a date library for formatting just yet), and some parts of the migration function when adding the de-duplication feature
