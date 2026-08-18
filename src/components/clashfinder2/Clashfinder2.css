@@ -1,0 +1,59 @@
+:root {
+  --grid-width: 8rem;
+}
+.clashfinder2 {
+  border: 5px solid black;
+}
+
+.timetable-shell {
+  top: 0;
+  left: 0;
+  position: absolute;
+  /* width: 100vw; */
+  /* height: calc(100vh); /* header stuff height */ */
+  /* max-width: 1400px; */
+  /* max-height: 900px; */
+  margin: auto;
+  box-sizing: border-box;
+}
+.timetable-scroll {
+  /* width: 700px; */
+  left: 0;
+  position: relative;
+  /* height: 733px; */
+  overflow: hidden;
+  background: #cecece;
+
+  /* grid stuff */
+  display: grid;
+  grid-template-columns: repeat(5, var(--grid-width)); /* number of stages */
+  grid-auto-rows: 16px;
+}
+
+/* .cell { */
+/*   min-width: 100px; */
+/*   min-height: 2px; */
+/* } */
+
+.top-border {
+  border-top: 1px solid black;
+}
+
+.stage-header {
+  z-index: 999;
+  background: #cecece;
+  color: black;
+  /* border: 1px solid blue; */
+  top: 0;
+  position: sticky;
+  /* grid stuff */
+  display: grid;
+  grid-template-columns: repeat(5, var(--grid-width));
+   > div {
+     text-align: center;
+   }
+}
+
+.bands-overlay {
+  border: 1px solid black;
+}

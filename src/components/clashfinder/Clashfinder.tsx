@@ -1,4 +1,10 @@
-import { useEffect, useState } from "react";
+import {
+  useEffect,
+  useState,
+  type Dispatch,
+  type SetStateAction,
+} from "react";
+import cx from "classnames";
 import { BandSetButton } from "./BandSetButton";
 import type {
   BaybeatsDay,
@@ -6,7 +12,6 @@ import type {
   BaybeatsStage,
   UniqTixCountFormat,
 } from "../../types/types";
-import { TimeColumn } from "./TimeColumn";
 import { TimeMarkers } from "./TimeMarkers";
 import { useGetTimeRangeStuff } from "./useGetTimeRangeStuff";
 import { festival_schedule as festivalData } from "../../schedule.json";
@@ -22,7 +27,8 @@ import { Banner } from "./Banner";
 
 const typedFestivalData: BaybeatsFestivalData = festivalData;
 
-const offset = -10; // huh ???
+const offset = -60; // huh ???
+const mainBGColor = "bg-fuchsia-900";
 
 function Clashfinder() {
   const todayBaybeatsDay = getTodayBaybeatsDay();
@@ -128,7 +134,7 @@ function Clashfinder() {
 
   const calculateCurrentTimePos = () => {
     const d = new Date();
-    let dHours = d.getHours();
+    const dHours = d.getHours();
     const dMinutes = d.getMinutes() + 5;
     const minutes = dHours * 60 + dMinutes;
     const newPos = (minutes - minTime) * pixelsPerMinute + 60 + offset;
@@ -144,6 +150,7 @@ function Clashfinder() {
   }
 
   const debounced = debounce(() => {
+    // return;
     calculateCurrentTimePos();
   }, 1000);
 
@@ -152,96 +159,158 @@ function Clashfinder() {
     setHideBanner(true);
   };
 
+  const stageFlexClass =
+    "flex-1 min-w-[120px] max-w-[240px] bg-fuchsia-950 backdrop-blur-sm";
+
   return (
-    <div className="bg-gradient-to-br from-fuchsia-900 via-fuchsia-1000 to-fuchsia-1000 w-screen overflow-scroll h-screen">
-      {hideBanner ? null : (
-        <Banner
-          tixCount={tixCount}
-          bandSetCount={bandSetCount}
-          promptDelete={promptDelete}
-          closeBanner={closeBanner}
-        />
-      )}
-      <div className="flex gap-3 text-nowrap py-2 pb-2 pt-8 overflow-x-auto">
-        {(Object.keys(typedFestivalData) as BaybeatsDay[]).map((day) => (
-          <button
-            key={day}
-            onClick={() => setSelectedDay(day)}
-            className={`px-2 py-1 rounded-md font-semibold transition-all text-sm ${
-              selectedDay === day
-                ? "bg-white text-purple-900 shadow-lg scale-105"
-                : "text-white hover:bg-purple-700"
-            }`}
-          >
-            {typedFestivalData[day].date}
-          </button>
-        ))}
-        {hideBanner ? (
-          <button
-            onClick={() => {
-              localStorage.removeItem("hideBanner");
-              setHideBanner(false);
-            }}
-            className={`rounded-md font-semibold text-sm text-white hover:bg-purple-700" `}
-          >
-            info
-          </button>
-        ) : null}
-      </div>
-      <div className="rounded-xl px-1">
-        <div
-          className="flex gap-0 overflow-x-auto h-screen"
-          onScroll={debounced}
-        >
-          {/* Time column */}
-          <div className="relative flex-shrink-0 w-8 mr-4 top-12">
-            <div style={{ height: `${timelineHeight}px` }} className="relative">
-              <TimeColumn markers={timeMarkers} />
-            </div>
-          </div>
-
-          {/* Stage columns */}
-          {stages.map((stage) => (
-            <div
-              key={stage}
-              className="flex-1 min-w-[120px] max-w-[240px] bg-fuchsia-950 backdrop-blur-sm"
-              style={{ height: `${timelineHeight + 134}px` }} // huh?
-            >
-              {showCurrentTime && <CurrentTime pos={currentTimePos} />}
-              <div className="bg-fuchsia-950 text-white font-bold text-center mb-4 p-2 border-b-2 border-white/30 text-nowrap truncate sticky top-0 z-11">
-                {stage}
-              </div>
+    <div className="bg-gradient-to-br from-fuchsia-900 via-fuchsia-1000 to-fuchsia-1000 w-screen h-screen overflow-auto">
+      <Banner
+        tixCount={tixCount}
+        bandSetCount={bandSetCount}
+        promptDelete={promptDelete}
+        closeBanner={closeBanner}
+      />
+      <ChangeDayButton
+        setSelectedDay={setSelectedDay}
+        selectedDay={selectedDay}
+      />
+      <table style={{ tableLayout: "auto" }}>
+        <TableHeader stages={stages} />
+        <tbody>
+          <tr>
+            <td>
               <div
-                className="relative border-l-2 border-white/20 l-[-1px]"
-                style={{
-                  height: `${timelineHeight + 75}px`,
-                }}
+                // onScroll={debounced}
+                className="rounded-xl px-1 flex"
               >
-                {/* Hour grid lines */}
-                <TimeMarkers markers={timeMarkers} />
+                {/* Time column */}
+                {/* TODO, see if it's possible to get this sticky */}
 
-                {/* Artist slots */}
-                {dayData.stages[stage]?.map((baybeatsSet) => {
-                  return (
-                    <BandSetButton
-                      setBandSetCount={setBandSetCount}
-                      refreshWorkaround={refreshWorkaround}
-                      setRefreshWorkaround={setRefreshWorkaround}
-                      key={`${baybeatsSet.artist}-${stage}-${baybeatsSet.startTime}`}
-                      baybeatsSet={baybeatsSet}
-                      stage={stage as BaybeatsStage}
-                      minTime={minTime}
-                      pixelsPerMinute={pixelsPerMinute}
-                    />
-                  );
-                })}
+                {/* Stage columns */}
+                {stages.map((stage) => (
+                  <div
+                    key={stage}
+                    className={stageFlexClass}
+                    style={{ height: `${timelineHeight + 134}px` }} // huh?
+                  >
+                    {showCurrentTime && <CurrentTime pos={currentTimePos} />}
+
+                    <div
+                      className="relative border-l-2 border-white/20 l-[-1px]"
+                      style={{
+                        height: `${timelineHeight + 75}px`,
+                      }}
+                    >
+                      {/* Hour grid lines */}
+                      <TimeMarkers markers={timeMarkers} />
+
+                      {/* Artist slots */}
+                      {dayData.stages[stage]?.map((baybeatsSet) => {
+                        return (
+                          <BandSetButton
+                            setBandSetCount={setBandSetCount}
+                            refreshWorkaround={refreshWorkaround}
+                            setRefreshWorkaround={setRefreshWorkaround}
+                            key={`${baybeatsSet.artist}-${stage}-${baybeatsSet.startTime}`}
+                            baybeatsSet={baybeatsSet}
+                            stage={stage as BaybeatsStage}
+                            minTime={minTime}
+                            pixelsPerMinute={pixelsPerMinute}
+                          />
+                        );
+                      })}
+                    </div>
+                  </div>
+                ))}
               </div>
-            </div>
-          ))}
-        </div>
-      </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   );
 }
+
+type HeadeStuffProps = {
+  stages: BaybeatsStage[];
+};
+const TableHeader = (props: HeadeStuffProps) => {
+  const { stages } = props;
+  const mainClasses = "sticky z-99999 w-screen top-0";
+  return (
+    <thead>
+      <tr>
+        <th className={cx(mainClasses)}>
+          <div className="flex pl-1">
+            {stages.map((stage) => (
+              <div
+                key={stage}
+                className={cx(
+                  "bg-fuchsia-950 text-white font-bold text-center p-2 border-b-2 border-white/30 text-nowrap truncate",
+                  // mainClasses,
+                  // TODO: this will break if stages < 5
+                  "min-w-[120.5px] max-w-[240px]",
+                  // "border border-dashed border-1 border-yellow-400"
+                )}
+              >
+                {stage}
+              </div>
+            ))}
+          </div>
+        </th>
+      </tr>
+    </thead>
+  );
+};
+
+const buttonClass = `px-2 py-1 rounded-md font-semibold text-sm`;
+const buttonClassSelected = "bg-white text-purple-900 shadow-lg scale-105";
+
+type ChangeDayButtonProps = {
+  setSelectedDay: Dispatch<SetStateAction<BaybeatsDay>>;
+  selectedDay: BaybeatsDay;
+};
+const ChangeDayButton = (props: ChangeDayButtonProps) => {
+  const { setSelectedDay, selectedDay } = props;
+  const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
+
+  const onClick = (day: BaybeatsDay) => {
+    setSelectedDay(day);
+    setIsMenuOpen(false);
+  };
+
+  return (
+    <div
+      className={cx(
+        "fixed flex flex-col bottom-3 right-3 z-99999 shadow-lg transition-all",
+        mainBGColor,
+      )}
+    >
+      {!isMenuOpen ? (
+        <button
+          onClick={() => setIsMenuOpen(true)}
+          className={cx(buttonClassSelected, buttonClassSelected)}
+        >
+          {typedFestivalData[selectedDay].date}
+        </button>
+      ) : (
+        (Object.keys(typedFestivalData) as BaybeatsDay[]).map((day) => (
+          <button
+            key={day}
+            onClick={() => onClick(day)}
+            className={cx(
+              buttonClass,
+              selectedDay === day
+                ? buttonClassSelected
+                : "text-white hover:bg-purple-700",
+            )}
+          >
+            {typedFestivalData[day].date}
+          </button>
+        ))
+      )}
+    </div>
+  );
+};
 
 export default Clashfinder;
