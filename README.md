@@ -1,6 +1,6 @@
-# Baybeats 2025 Clashfinder + Ticket Holder
+# Baybeats 2026 Clashfinder + Ticket Holder
 
-Clashfinder + ticket holder web app for Baybeats 2025, a music festival held yearly in Singapore. works offline as a PWA and keeps all data stored locally in the user's browser
+Clashfinder + ticket holder web app for Baybeats 2026, a music festival held yearly in Singapore. works offline as a PWA and keeps all data stored locally in the user's browser
 
 [https://baybeats-clashfinder-ticket-holder.vercel.app/](https://baybeats-clashfinder-ticket-holder.vercel.app/)
 

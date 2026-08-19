@@ -25,7 +25,7 @@ const Banner = ({ bandSetCount, promptDelete, tixCount }: BannerProps) => {
   return (
     <div className="pl-1">
       <h1 onClick={onClick} className="text-4xl font-bold text-white mt-4 flex">
-        Baybeats 2025 Clashfinder
+        Baybeats 2026 Clashfinder
       </h1>
       <H4>
         Ticket management: Click <strong>any</strong> band slot to start storing
