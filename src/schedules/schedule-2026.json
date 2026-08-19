@@ -20,7 +20,7 @@
             "setDurationMins": 60
           }
         ],
-        "Arena": [
+        "Outdoor": [
           {
             "startTime": "7.15pm",
             "artist": "Soggy Jeans",
@@ -37,7 +37,7 @@
             "setDurationMins": 60
           }
         ],
-        "Chillout": [
+        "Concourse": [
           {
             "startTime": "6.45pm",
             "artist": "Says It All",
@@ -83,7 +83,7 @@
             "setDurationMins": 60
           }
         ],
-        "Arena": [
+        "Outdoor": [
           {
             "startTime": "6.45pm",
             "artist": "Hidemen",
@@ -100,7 +100,7 @@
             "setDurationMins": 45
           }
         ],
-        "Chillout": [
+        "Concourse": [
           {
             "startTime": "6.00pm",
             "artist": "Kin Leonn",
@@ -151,7 +151,7 @@
     "day_3": {
       "date": "5 Sep, Sat",
       "stages": {
-        "Arena": [
+        "Outdoor": [
           {
             "startTime": "7.15pm",
             "artist": "Mediocre Haircut Crew",
@@ -202,7 +202,7 @@
             "setDurationMins": 60
           }
         ],
-        "Chillout": [
+        "Concourse": [
           {
             "startTime": "6.00pm",
             "artist": "VYLT",
@@ -287,7 +287,7 @@
             "setDurationMins": 60
           }
         ],
-        "Arena": [
+        "Outdoor": [
           {
             "startTime": "7.15pm",
             "artist": "Gabba (PH)",
@@ -304,7 +304,7 @@
             "setDurationMins": 60
           }
         ],
-        "Chillout": [
+        "Concourse": [
           {
             "startTime": "6.00pm",
             "artist": "T.HIRST",
