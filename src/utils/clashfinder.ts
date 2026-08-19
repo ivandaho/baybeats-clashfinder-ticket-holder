@@ -25,6 +25,9 @@ const isNeedTix = (stage: BaybeatsStage) => {
   }
 };
 
+const needTixBorderClassName =
+  "outline rounded-md outline-dashed outline-lime-700 -outline-offset-6";
+
 const addMinutes = (timeStr: string, minutesToAdd: number) => {
   // Parse the input time string
   const match = timeStr.match(/^(\d+)(?:\.(\d+))?(am|pm)$/i);
@@ -80,7 +83,7 @@ const getTodayBaybeatsDay = (): BaybeatsDay | "not_baybeats_yet" => {
     case 6:
       return "day_4";
     default:
-      return "not_baybeats_yet"
+      return "not_baybeats_yet";
   }
 };
 
@@ -101,4 +104,11 @@ function debounce<T extends (...args: any[]) => any>(
   };
 }
 
-export { addMinutes, timeToMinutes, isNeedTix, getTodayBaybeatsDay, debounce };
+export {
+  addMinutes,
+  timeToMinutes,
+  isNeedTix,
+  getTodayBaybeatsDay,
+  debounce,
+  needTixBorderClassName,
+};

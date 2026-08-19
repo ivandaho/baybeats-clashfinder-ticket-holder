@@ -1,4 +1,5 @@
 import type { BaybeatsStage } from "../../types/types";
+import { needTixBorderClassName } from "../../utils/clashfinder";
 import cx from "../../utils/cx";
 
 const needTixStages: BaybeatsStage[] = ["Annexe", "Powerhouse"];
@@ -17,9 +18,7 @@ const TableHeader = (props: HeadeStuffProps) => {
             key={stage}
             className={cx(
               mainClasses,
-              needTixStages.includes(stage)
-                ? "outline rounded-md outline-dashed outline-lime-500 -outline-offset-6"
-                : "",
+              needTixStages.includes(stage) ? needTixBorderClassName : "",
             )}
           >
             <div
