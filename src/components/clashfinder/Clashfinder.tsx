@@ -16,12 +16,7 @@ import {
   migrateLegacyData,
   removeAllPDFData,
 } from "../../utils/pdf";
-import {
-  debounce,
-  getTodayBaybeatsDay,
-  isNeedTix,
-  needTixBorderClassName,
-} from "../../utils/clashfinder";
+import { debounce, getTodayBaybeatsDay } from "../../utils/clashfinder";
 import { CurrentTime } from "./CurrentTime";
 import { Banner } from "./Banner";
 import { SelectDayButton } from "../selectDayButton/SelectDayButton";
@@ -201,10 +196,7 @@ function Clashfinder() {
                   {/* Stage columns */}
                   <div
                     key={stage}
-                    className={cx(
-                      stageFlexClass,
-                      isNeedTix(stage) ? needTixBorderClassName : "",
-                    )}
+                    className={stageFlexClass}
                     style={{ height: `${timelineHeight + 134}px` }} // huh?
                   >
                     {showCurrentTime && <CurrentTime pos={currentTimePos} />}

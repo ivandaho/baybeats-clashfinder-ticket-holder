@@ -26,7 +26,7 @@ const isNeedTix = (stage: BaybeatsStage) => {
 };
 
 const needTixBorderClassName =
-  "outline rounded-md outline-dashed outline-lime-700 -outline-offset-6";
+  "outline rounded-md outline-dashed outline-lime-500 -outline-offset-6";
 
 const addMinutes = (timeStr: string, minutesToAdd: number) => {
   // Parse the input time string
