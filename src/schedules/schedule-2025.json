@@ -1,0 +1,304 @@
+{
+  "festival_schedule": {
+    "day_1": {
+      "date": "30 Oct, Thu",
+      "stages": {
+        "Outdoor": [
+          {
+            "startTime": "7pm",
+            "artist": "SHINSEINA"
+          },
+          {
+            "startTime": "8.20pm",
+            "artist": "rathmock"
+          },
+          {
+            "startTime": "9.40pm",
+            "artist": "ONE CLICK STRAIGHT (PH)",
+            "note": "in conjunction with The Rest is Noise PH"
+          }
+        ],
+        "Annexe": [
+          {
+            "startTime": "7.40pm",
+            "artist": "haldi honey"
+          },
+          {
+            "startTime": "9pm",
+            "artist": "pines"
+          },
+          {
+            "startTime": "10.30pm",
+            "artist": "LEMONY (TH)",
+            "note": "in conjunction with Big Mountain Festival"
+          }
+        ]
+      }
+    },
+    "day_2": {
+      "date": "31 Oct, Fri",
+      "stages": {
+        "LiveWire": [
+          {
+            "startTime": "6.40pm",
+            "artist": "Aggressive Raisin Cat"
+          },
+          {
+            "startTime": "8.20pm",
+            "artist": "Massacre Conspiracy (MY)"
+          },
+          {
+            "startTime": "10pm",
+            "artist": "Chicosci (PH)"
+          }
+        ],
+        "Powerhouse": [
+          {
+            "startTime": "6.10pm",
+            "artist": "A R A J U A"
+          },
+          {
+            "startTime": "7.50pm",
+            "artist": "Rub Of Rub (ID)"
+          },
+          {
+            "startTime": "9.30pm",
+            "artist": "Midnight Fusic (MY)"
+          },
+          {
+            "startTime": "11.10pm",
+            "artist": "JPBS (TH)"
+          }
+        ],
+        "Outdoor": [
+          {
+            "startTime": "7pm",
+            "artist": "Jumat Gombrong (ID)"
+          },
+          {
+            "startTime": "8.40pm",
+            "artist": "Johny Comes Lately (MY)"
+          },
+          {
+            "startTime": "10.20pm",
+            "artist": "Ali (ID)"
+          }
+        ],
+        "Annexe": [
+          {
+            "startTime": "7.30pm",
+            "artist": "完美倒立 The Upside Down (CN)"
+          },
+          {
+            "startTime": "8.40pm",
+            "artist": "Bellied Star"
+          },
+          {
+            "startTime": "9.50pm",
+            "artist": "Soumbalgwang (KR)"
+          }
+        ],
+        "Concourse": [
+          {
+            "startTime": "5pm",
+            "artist": "motifs"
+          },
+          {
+            "startTime": "6pm",
+            "artist": "A Vacant Affair"
+          },
+          {
+            "startTime": "7.30pm",
+            "artist": "motifs"
+          },
+          {
+            "startTime": "9.10pm",
+            "artist": "A Vacant Affair"
+          }
+        ]
+      }
+    },
+    "day_3": {
+      "date": "1 Nov, Sat",
+      "stages": {
+        "LiveWire": [
+          {
+            "startTime": "6.40pm",
+            "artist": "CÚT LỘN (VN)"
+          },
+          {
+            "startTime": "8.20pm",
+            "artist": "A Vacant Affair"
+          },
+          {
+            "startTime": "10pm",
+            "artist": "Alliance of Hate"
+          },
+          {
+            "startTime": "11.10pm",
+            "artist": "Sekumpulan Orang Gila (MY)"
+          }
+        ],
+        "Powerhouse": [
+          {
+            "startTime": "7.10pm",
+            "artist": "ANECHOIS"
+          },
+          {
+            "startTime": "8.20pm",
+            "artist": "Alec Orachi (TH)"
+          },
+          {
+            "startTime": "9.30pm",
+            "artist": "weish"
+          },
+          {
+            "startTime": "10.40pm",
+            "artist": "paranoid void (JP)"
+          }
+        ],
+        "Outdoor": [
+          {
+            "startTime": "6.30pm",
+            "artist": "Sandwich (PH)"
+          },
+          {
+            "startTime": "7.40pm",
+            "artist": "toconoma (JP)"
+          },
+          {
+            "startTime": "8.50pm",
+            "artist": "The Adams (ID)"
+          },
+          {
+            "startTime": "10pm",
+            "artist": "Wicked Aura"
+          }
+        ],
+        "Annexe": [
+          {
+            "startTime": "6.30pm",
+            "artist": "FORD TRIO (TH)"
+          },
+          {
+            "startTime": "7.40pm",
+            "artist": "Fayzz (CN)"
+          },
+          {
+            "startTime": "8.50pm",
+            "artist": "bongjeingan (KR)"
+          }
+        ],
+        "Concourse": [
+          {
+            "startTime": "5pm",
+            "artist": "Saints Amongst Sinners"
+          },
+          {
+            "startTime": "6pm",
+            "artist": "Midnight Fusic (MY)"
+          },
+          {
+            "startTime": "7.30pm",
+            "artist": "Saints Amongst Sinners"
+          },
+          {
+            "startTime": "9.10pm",
+            "artist": "Midnight Fusic (MY)"
+          }
+        ]
+      }
+    },
+    "day_4": {
+      "date": "2 Nov, Sun",
+      "stages": {
+        "LiveWire": [
+          {
+            "startTime": "6.40pm",
+            "artist": "Zygnema (IN)"
+          },
+          {
+            "startTime": "8.20pm",
+            "artist": "Plainsunset (SG)"
+          },
+          {
+            "startTime": "10pm",
+            "artist": "Flesh Juicer (TW)"
+          },
+          {
+            "startTime": "11.10pm",
+            "artist": "Battlesnake (AU)"
+          }
+        ],
+        "Powerhouse": [
+          {
+            "startTime": "7.10pm",
+            "artist": "Blanco Teta (AR)"
+          },
+          {
+            "startTime": "8.20pm",
+            "artist": "motifs"
+          },
+          {
+            "startTime": "9.30pm",
+            "artist": "temp. (TH)"
+          },
+          {
+            "startTime": "10.40pm",
+            "artist": "mouse on the keys (JP)"
+          }
+        ],
+        "Outdoor": [
+          {
+            "startTime": "6.30pm",
+            "artist": "Saints Amongst Sinners"
+          },
+          {
+            "startTime": "7.40pm",
+            "artist": "Carsick Cars (CN)"
+          },
+          {
+            "startTime": "8.50pm",
+            "artist": "N.Y.P.D. 南洋派对 (HK)"
+          },
+          {
+            "startTime": "10.10pm",
+            "artist": "Silica Gel (KR)"
+          }
+        ],
+        "Annexe": [
+          {
+            "startTime": "6.30pm",
+            "artist": "TOFU (TH)"
+          },
+          {
+            "startTime": "7.40pm",
+            "artist": "Dirgahayu (MY)"
+          },
+          {
+            "startTime": "8.50pm",
+            "artist": "The Bois"
+          }
+        ],
+        "Concourse": [
+          {
+            "startTime": "5pm",
+            "artist": "Sekumpulan Orang Gila (MY)"
+          },
+          {
+            "startTime": "6pm",
+            "artist": "Microchip Terror"
+          },
+          {
+            "startTime": "7.30pm",
+            "artist": "Sekumpulan Orang Gila (MY)"
+          },
+          {
+            "startTime": "9.10pm",
+            "artist": "Microchip Terror"
+          }
+        ]
+      }
+    }
+  }
+}

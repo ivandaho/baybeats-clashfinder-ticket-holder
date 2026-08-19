@@ -8,7 +8,8 @@ import type {
 } from "../../types/types";
 import { TimeMarkers } from "./TimeMarkers";
 import { useGetTimeRangeStuff } from "./useGetTimeRangeStuff";
-import { festival_schedule as festivalData } from "../../schedule.json";
+import { festival_schedule as festivalData2026 } from "../../schedules/schedule-2026.json";
+import { festival_schedule as festivalData2025 } from "../../schedules/schedule-2025.json";
 import { H4 } from "./H4";
 import {
   getStoredPdfCount,
@@ -22,7 +23,6 @@ import { SelectDayButton } from "../selectDayButton/SelectDayButton";
 import { TableHeader } from "../tableHeader/TableHeader";
 import cx from "../../utils/cx";
 
-const typedFestivalData: BaybeatsFestivalData = festivalData;
 const gradientCSS =
   "bg-gradient-to-br from-fuchsia-900 via-fuchsia-1000 to-fuchsia-1000";
 
@@ -31,6 +31,15 @@ function Clashfinder() {
   const [selectedDay, setSelectedDay] = useState<BaybeatsDay>(todayBaybeatsDay);
   const [refreshWorkaround, setRefreshWorkaround] = useState<number>(0);
   const showCurrentTime = selectedDay === todayBaybeatsDay;
+  const [bandSetCount, setBandSetCount] = useState<null | number>(null);
+  const [tixCount, setTixCount] = useState<null | number>(null);
+  const [isMigrating, setIsMigrating] = useState<boolean>(true);
+  const [currentTimePos, setCurrentTimePos] = useState(-1);
+  const [year, setYear] = useState("2026");
+
+  // TODO: support more than 2 years?
+  const typedFestivalData: BaybeatsFestivalData =
+    year === "2026" ? festivalData2026 : festivalData2025;
 
   const {
     timelineHeight,
@@ -40,10 +49,6 @@ function Clashfinder() {
     dayData,
     minTime,
   } = useGetTimeRangeStuff(selectedDay, typedFestivalData);
-  const [bandSetCount, setBandSetCount] = useState<null | number>(null);
-  const [tixCount, setTixCount] = useState<null | number>(null);
-  const [isMigrating, setIsMigrating] = useState<boolean>(true);
-  const [currentTimePos, setCurrentTimePos] = useState(-1);
 
   useEffect(() => {
     const fn = async () => {
@@ -154,6 +159,8 @@ function Clashfinder() {
   return (
     <div className={cx(gradientCSS, "w-screen h-screen overflow-auto")}>
       <Banner
+        year={year}
+        setYear={setYear}
         tixCount={tixCount}
         bandSetCount={bandSetCount}
         promptDelete={promptDelete}

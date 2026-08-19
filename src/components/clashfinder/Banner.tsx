@@ -1,31 +1,41 @@
 import { useEffect, useState } from "react";
 import { H4 } from "./H4";
-const VERSION = "1.1";
+const VERSION = "2.1";
 
 type BannerProps = {
   bandSetCount: number | null;
   promptDelete: () => Promise<void>;
   tixCount: number | null;
+  setYear: (v: string) => void;
+  year: string;
 };
 
-const Banner = ({ bandSetCount, promptDelete, tixCount }: BannerProps) => {
+const Banner = ({
+  bandSetCount,
+  promptDelete,
+  tixCount,
+  year,
+  setYear,
+}: BannerProps) => {
   const [counter, setCounter] = useState(0);
-
   const onClick = () => {
     setCounter(counter + 1);
   };
 
   useEffect(() => {
     if (counter >= 10) {
-      alert(`version: ${VERSION}`);
+      const newYear = year === "2026" ? "2025" : "2026";
+      setYear(newYear);
+      alert(`version: ${VERSION}. Baybeats year is set to ${newYear}`);
       setCounter(0);
     }
-  }, [counter]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [counter, setYear]);
 
   return (
     <div className="pl-1">
       <h1 onClick={onClick} className="text-4xl font-bold text-white mt-4 flex">
-        Baybeats 2026 Clashfinder
+        Baybeats {year} Clashfinder
       </h1>
       <H4>
         Ticket management: Click <strong>any</strong> band slot to start storing
