@@ -63,7 +63,7 @@ const Banner = ({ bandSetCount, promptDelete, tixCount }: BannerProps) => {
             e.preventDefault();
             promptDelete();
           }}
-          className="!text-red-500 mt-2 text-[10px] cursor-pointer"
+          className="!text-red-500 my-2 text-[10px] cursor-pointer"
         >
           DELETE ALL DATA
         </H4>

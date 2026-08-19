@@ -30,15 +30,7 @@ const useGetTimeRangeStuff = (
 } => {
   const dayData = typedFestivalData[selectedDay];
   const stages = (Object.keys(dayData.stages) as BaybeatsStage[]).sort(
-    (a, b) => {
-      const sortA = stageOrder.indexOf(a);
-      const sortB = stageOrder.indexOf(b);
-      if (sortA > sortB) {
-        return 1;
-      } else if (sortB < sortA) {
-        return -1;
-      } else return 0;
-    },
+    (a, b) => stageOrder.indexOf(a) - stageOrder.indexOf(b),
   );
 
   // Find time range

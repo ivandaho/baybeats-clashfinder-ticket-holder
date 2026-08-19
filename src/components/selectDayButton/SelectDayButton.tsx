@@ -3,8 +3,7 @@ import type { BaybeatsDay, BaybeatsFestivalData } from "../../types/types";
 import cx from "../../utils/cx";
 
 const buttonClass = `px-2 py-1 rounded-md font-semibold text-sm`;
-const buttonClassSelected = "bg-white text-purple-900 shadow-lg scale-105";
-const mainBGColor = "bg-fuchsia-900";
+const buttonClassSelected = "bg-white text-lime-600 scale-105";
 
 type OpenButtonProps = {
   setIsMenuOpen: Dispatch<SetStateAction<boolean>>;
@@ -46,8 +45,7 @@ const SelectDayButton = (props: SelectDayButtonProps) => {
   return (
     <div
       className={cx(
-        "fixed flex flex-col bottom-4 right-4 z-99999 shadow-lg transition-all rounded-lg",
-        mainBGColor,
+        "fixed flex flex-col bottom-4 right-4 z-99999 shadow-lg/40 transition-all rounded-lg bg-lime-800 border-1 border-lime-700",
       )}
     >
       {!isMenuOpen ? (

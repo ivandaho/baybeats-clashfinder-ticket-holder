@@ -20,10 +20,11 @@ import { CurrentTime } from "./CurrentTime";
 import { Banner } from "./Banner";
 import { SelectDayButton } from "../selectDayButton/SelectDayButton";
 import { TableHeader } from "../tableHeader/TableHeader";
+import cx from "../../utils/cx";
 
 const typedFestivalData: BaybeatsFestivalData = festivalData;
-
-const offset = -60; // huh ???
+const gradientCSS =
+  "bg-gradient-to-br from-fuchsia-900 via-fuchsia-1000 to-fuchsia-1000";
 
 function Clashfinder() {
   const todayBaybeatsDay = getTodayBaybeatsDay();
@@ -96,7 +97,7 @@ function Clashfinder() {
           data.forEach((d) => {
             tixCounter += d.tixCount;
           });
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (e) {
           // ignore
         }
@@ -131,13 +132,18 @@ function Clashfinder() {
     const dHours = d.getHours();
     const dMinutes = d.getMinutes() + 5;
     const minutes = dHours * 60 + dMinutes;
-    const newPos = (minutes - minTime) * pixelsPerMinute + 60 + offset;
+    const newPos = (minutes - minTime) * pixelsPerMinute;
     setCurrentTimePos(newPos);
   };
 
   if (isMigrating) {
     return (
-      <div className="bg-gradient-to-br from-fuchsia-900 via-fuchsia-1000 to-fuchsia-1000 w-screen overflow-scroll h-screen text-white p-4">
+      <div
+        className={cx(
+          gradientCSS,
+          "w-screen overflow-scroll h-screen text-white p-4",
+        )}
+      >
         <H4>Migrating data...</H4>
       </div>
     );
@@ -146,7 +152,7 @@ function Clashfinder() {
   const stageFlexClass = "flex-1 min-w-[120px] bg-fuchsia-950 backdrop-blur-sm";
 
   return (
-    <div className="bg-gradient-to-br from-fuchsia-900 via-fuchsia-1000 to-fuchsia-1000 w-screen h-screen overflow-auto">
+    <div className={cx(gradientCSS, "w-screen h-screen overflow-auto")}>
       <Banner
         tixCount={tixCount}
         bandSetCount={bandSetCount}

@@ -1,6 +1,8 @@
 import type { BaybeatsStage } from "../../types/types";
 import cx from "../../utils/cx";
 
+const needTixStages: BaybeatsStage[] = ["Annexe", "Powerhouse"];
+
 type HeadeStuffProps = {
   stages: BaybeatsStage[];
 };
@@ -11,10 +13,21 @@ const TableHeader = (props: HeadeStuffProps) => {
     <thead>
       <tr>
         {stages.map((stage) => (
-          <th key={stage} className={cx(mainClasses)}>
+          <th
+            key={stage}
+            className={cx(
+              mainClasses,
+              needTixStages.includes(stage)
+                ? "outline rounded-md outline-dashed outline-lime-500 -outline-offset-6"
+                : "",
+            )}
+          >
             <div
               className={cx(
-                "bg-fuchsia-950 text-white font-bold text-center p-2 border-b-2 border-white/30 text-nowrap truncate",
+                "bg-fuchsia-950 font-bold text-center p-2 border-b-2 border-white/30 text-nowrap truncate",
+                needTixStages.includes(stage)
+                  ? "text-lime-500 text-shadow-md"
+                  : "text-white",
               )}
             >
               {stage}

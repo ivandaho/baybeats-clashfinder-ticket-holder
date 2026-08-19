@@ -17,8 +17,8 @@ import type { BaybeatsSet, BaybeatsStage } from "../../types/types";
 import { TixBadge } from "./TixBadge";
 import cx from "../../utils/cx";
 
-const haveTixClass = "from-indigo-900";
-const noTixClass = "from-pink-500";
+const haveTixClass = "from-lime-900 border-lime-700 border-1";
+const noTixClass = "from-pink-700";
 const dontNeedTixClass = "from-blue-400";
 
 type BandSetButtonProps = {
@@ -85,7 +85,7 @@ const BandSetButton = ({
           }
         }}
         className={cx(
-          "absolute left-1 right-1 bg-gradient-to-br to-purple-600 rounded-lg px-2 py-1 overflow-hidden hover:scale-105 hover:z-10 transition-transform cursor-pointer shadow-lg flex flex-col",
+          "absolute left-1 right-1 bg-gradient-to-br to-lime-600 rounded-lg px-2 py-1 overflow-hidden hover:scale-105 hover:z-10 transition-transform cursor-pointer shadow-lg flex flex-col",
           needTix
             ? tixCount > 0
               ? haveTixClass

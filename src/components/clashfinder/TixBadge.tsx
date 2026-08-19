@@ -57,7 +57,7 @@ const TixBadge = ({
           </button>
         )
       ) : (
-        <span className={cx(btnClass, "bg-fuchsia-800")}>add tix</span>
+        <span className={cx(btnClass, "bg-lime-700")}>add tix</span>
       )}
     </div>
   );
