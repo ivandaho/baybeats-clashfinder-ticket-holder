@@ -1,6 +1,6 @@
 import { useEffect, useState, type Dispatch, type SetStateAction } from "react";
 import { deleteTicketPdf, removeArtistTixInfoFromLS } from "../../utils/pdf";
-import cx from "classnames";
+import cx from "../../utils/cx";
 
 type TixBadgeProps = {
   tixCount: number;

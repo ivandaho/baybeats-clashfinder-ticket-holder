@@ -9,6 +9,14 @@ import { timeToMinutes } from "../../utils/clashfinder";
 
 const pixelsPerMinute = 2; // Scale factor
 
+const stageOrder: BaybeatsStage[] = [
+  "LiveWire",
+  "Outdoor",
+  "Concourse",
+  "Powerhouse",
+  "Annexe",
+];
+
 const useGetTimeRangeStuff = (
   selectedDay: BaybeatsDay,
   typedFestivalData: BaybeatsFestivalData,
@@ -21,7 +29,17 @@ const useGetTimeRangeStuff = (
   minTime: number;
 } => {
   const dayData = typedFestivalData[selectedDay];
-  const stages = Object.keys(dayData.stages) as BaybeatsStage[];
+  const stages = (Object.keys(dayData.stages) as BaybeatsStage[]).sort(
+    (a, b) => {
+      const sortA = stageOrder.indexOf(a);
+      const sortB = stageOrder.indexOf(b);
+      if (sortA > sortB) {
+        return 1;
+      } else if (sortB < sortA) {
+        return -1;
+      } else return 0;
+    },
+  );
 
   // Find time range
   let minTime = Infinity;

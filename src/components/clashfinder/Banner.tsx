@@ -4,16 +4,11 @@ const VERSION = "1.1";
 
 type BannerProps = {
   bandSetCount: number | null;
-  closeBanner: () => void;
   promptDelete: () => Promise<void>;
   tixCount: number | null;
 };
-const Banner = ({
-  bandSetCount,
-  closeBanner,
-  promptDelete,
-  tixCount,
-}: BannerProps) => {
+
+const Banner = ({ bandSetCount, promptDelete, tixCount }: BannerProps) => {
   const [counter, setCounter] = useState(0);
 
   const onClick = () => {
@@ -31,12 +26,6 @@ const Banner = ({
     <div className="pl-1">
       <h1 onClick={onClick} className="text-4xl font-bold text-white mt-4 flex">
         Baybeats 2025 Clashfinder
-        <span
-          onClick={closeBanner}
-          className="p-2 text-[8px] h-20 w-20 text-center text-nowrap text-white/50 cursor-pointer"
-        >
-          close banner
-        </span>
       </h1>
       <H4>
         Ticket management: Click <strong>any</strong> band slot to start storing

@@ -1,5 +1,5 @@
 import type { HTMLProps, PropsWithChildren } from "react";
-import cx from "classnames";
+import cx from "../../utils/cx";
 
 const H4: React.FC<PropsWithChildren<HTMLProps<HTMLHeadingElement>>> = ({
   children,

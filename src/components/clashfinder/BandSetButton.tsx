@@ -13,9 +13,9 @@ import {
   readFilesAsyncish,
   saveTixPerBand,
 } from "../../utils/pdf";
-import cx from "classnames";
 import type { BaybeatsSet, BaybeatsStage } from "../../types/types";
 import { TixBadge } from "./TixBadge";
+import cx from "../../utils/cx";
 
 const haveTixClass = "from-indigo-900";
 const noTixClass = "from-pink-500";

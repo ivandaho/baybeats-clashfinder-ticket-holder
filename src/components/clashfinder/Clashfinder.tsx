@@ -1,10 +1,4 @@
-import {
-  useEffect,
-  useState,
-  type Dispatch,
-  type SetStateAction,
-} from "react";
-import cx from "classnames";
+import { useEffect, useState } from "react";
 import { BandSetButton } from "./BandSetButton";
 import type {
   BaybeatsDay,
@@ -21,14 +15,15 @@ import {
   migrateLegacyData,
   removeAllPDFData,
 } from "../../utils/pdf";
-import { debounce, getTodayBaybeatsDay } from "../../utils/clashfinder";
+import { getTodayBaybeatsDay } from "../../utils/clashfinder";
 import { CurrentTime } from "./CurrentTime";
 import { Banner } from "./Banner";
+import { SelectDayButton } from "../selectDayButton/SelectDayButton";
+import { TableHeader } from "../tableHeader/TableHeader";
 
 const typedFestivalData: BaybeatsFestivalData = festivalData;
 
 const offset = -60; // huh ???
-const mainBGColor = "bg-fuchsia-900";
 
 function Clashfinder() {
   const todayBaybeatsDay = getTodayBaybeatsDay();
@@ -45,9 +40,6 @@ function Clashfinder() {
     minTime,
   } = useGetTimeRangeStuff(selectedDay, typedFestivalData);
   const [bandSetCount, setBandSetCount] = useState<null | number>(null);
-  const [hideBanner, setHideBanner] = useState<boolean>(
-    localStorage.getItem("hideBanner") === "hide",
-  );
   const [tixCount, setTixCount] = useState<null | number>(null);
   const [isMigrating, setIsMigrating] = useState<boolean>(true);
   const [currentTimePos, setCurrentTimePos] = useState(-1);
@@ -104,6 +96,7 @@ function Clashfinder() {
           data.forEach((d) => {
             tixCounter += d.tixCount;
           });
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (e) {
           // ignore
         }
@@ -115,6 +108,7 @@ function Clashfinder() {
 
   useEffect(() => {
     calculateCurrentTimePos();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const promptDelete = async () => {
@@ -149,18 +143,7 @@ function Clashfinder() {
     );
   }
 
-  const debounced = debounce(() => {
-    // return;
-    calculateCurrentTimePos();
-  }, 1000);
-
-  const closeBanner = () => {
-    localStorage.setItem("hideBanner", "hide");
-    setHideBanner(true);
-  };
-
-  const stageFlexClass =
-    "flex-1 min-w-[120px] max-w-[240px] bg-fuchsia-950 backdrop-blur-sm";
+  const stageFlexClass = "flex-1 min-w-[120px] bg-fuchsia-950 backdrop-blur-sm";
 
   return (
     <div className="bg-gradient-to-br from-fuchsia-900 via-fuchsia-1000 to-fuchsia-1000 w-screen h-screen overflow-auto">
@@ -168,9 +151,9 @@ function Clashfinder() {
         tixCount={tixCount}
         bandSetCount={bandSetCount}
         promptDelete={promptDelete}
-        closeBanner={closeBanner}
       />
-      <ChangeDayButton
+      <SelectDayButton
+        festivalData={typedFestivalData}
         setSelectedDay={setSelectedDay}
         selectedDay={selectedDay}
       />
@@ -178,16 +161,16 @@ function Clashfinder() {
         <TableHeader stages={stages} />
         <tbody>
           <tr>
-            <td>
-              <div
-                // onScroll={debounced}
-                className="rounded-xl px-1 flex"
-              >
-                {/* Time column */}
-                {/* TODO, see if it's possible to get this sticky */}
+            {stages.map((stage) => (
+              <td>
+                <div
+                  // onScroll={debounced}
+                  className="flex"
+                >
+                  {/* Time column */}
+                  {/* TODO, see if it's possible to get this sticky */}
 
-                {/* Stage columns */}
-                {stages.map((stage) => (
+                  {/* Stage columns */}
                   <div
                     key={stage}
                     className={stageFlexClass}
@@ -221,96 +204,14 @@ function Clashfinder() {
                       })}
                     </div>
                   </div>
-                ))}
-              </div>
-            </td>
+                </div>
+              </td>
+            ))}
           </tr>
         </tbody>
       </table>
     </div>
   );
 }
-
-type HeadeStuffProps = {
-  stages: BaybeatsStage[];
-};
-const TableHeader = (props: HeadeStuffProps) => {
-  const { stages } = props;
-  const mainClasses = "sticky z-99999 w-screen top-0";
-  return (
-    <thead>
-      <tr>
-        <th className={cx(mainClasses)}>
-          <div className="flex pl-1">
-            {stages.map((stage) => (
-              <div
-                key={stage}
-                className={cx(
-                  "bg-fuchsia-950 text-white font-bold text-center p-2 border-b-2 border-white/30 text-nowrap truncate",
-                  // mainClasses,
-                  // TODO: this will break if stages < 5
-                  "min-w-[120.5px] max-w-[240px]",
-                  // "border border-dashed border-1 border-yellow-400"
-                )}
-              >
-                {stage}
-              </div>
-            ))}
-          </div>
-        </th>
-      </tr>
-    </thead>
-  );
-};
-
-const buttonClass = `px-2 py-1 rounded-md font-semibold text-sm`;
-const buttonClassSelected = "bg-white text-purple-900 shadow-lg scale-105";
-
-type ChangeDayButtonProps = {
-  setSelectedDay: Dispatch<SetStateAction<BaybeatsDay>>;
-  selectedDay: BaybeatsDay;
-};
-const ChangeDayButton = (props: ChangeDayButtonProps) => {
-  const { setSelectedDay, selectedDay } = props;
-  const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
-
-  const onClick = (day: BaybeatsDay) => {
-    setSelectedDay(day);
-    setIsMenuOpen(false);
-  };
-
-  return (
-    <div
-      className={cx(
-        "fixed flex flex-col bottom-3 right-3 z-99999 shadow-lg transition-all",
-        mainBGColor,
-      )}
-    >
-      {!isMenuOpen ? (
-        <button
-          onClick={() => setIsMenuOpen(true)}
-          className={cx(buttonClassSelected, buttonClassSelected)}
-        >
-          {typedFestivalData[selectedDay].date}
-        </button>
-      ) : (
-        (Object.keys(typedFestivalData) as BaybeatsDay[]).map((day) => (
-          <button
-            key={day}
-            onClick={() => onClick(day)}
-            className={cx(
-              buttonClass,
-              selectedDay === day
-                ? buttonClassSelected
-                : "text-white hover:bg-purple-700",
-            )}
-          >
-            {typedFestivalData[day].date}
-          </button>
-        ))
-      )}
-    </div>
-  );
-};
 
 export default Clashfinder;
