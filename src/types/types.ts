@@ -22,6 +22,7 @@ export type BaybeatsSet = {
   startTime: string;
   artist: string;
   note?: string;
+  setDurationMins?: number;
 };
 
 export type FestivalDay = {

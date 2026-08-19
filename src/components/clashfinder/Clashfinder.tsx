@@ -16,7 +16,7 @@ import {
   migrateLegacyData,
   removeAllPDFData,
 } from "../../utils/pdf";
-import { getTodayBaybeatsDay } from "../../utils/clashfinder";
+import { debounce, getTodayBaybeatsDay } from "../../utils/clashfinder";
 import { CurrentTime } from "./CurrentTime";
 import { Banner } from "./Banner";
 import { SelectDayButton } from "../selectDayButton/SelectDayButton";
@@ -28,7 +28,9 @@ const gradientCSS =
 
 function Clashfinder() {
   const todayBaybeatsDay = getTodayBaybeatsDay();
-  const [selectedDay, setSelectedDay] = useState<BaybeatsDay>(todayBaybeatsDay);
+  const [selectedDay, setSelectedDay] = useState<BaybeatsDay>(
+    todayBaybeatsDay === "not_baybeats_yet" ? "day_1" : todayBaybeatsDay,
+  );
   const [refreshWorkaround, setRefreshWorkaround] = useState<number>(0);
   const showCurrentTime = selectedDay === todayBaybeatsDay;
   const [bandSetCount, setBandSetCount] = useState<null | number>(null);
@@ -115,7 +117,7 @@ function Clashfinder() {
   useEffect(() => {
     calculateCurrentTimePos();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [selectedDay]);
 
   const promptDelete = async () => {
     const d = window.prompt(
@@ -134,7 +136,11 @@ function Clashfinder() {
 
   const calculateCurrentTimePos = () => {
     const d = new Date();
-    const dHours = d.getHours();
+    let dHours = d.getHours();
+    // support until 5am of same day
+    if (dHours <= 5) {
+      dHours += 24;
+    }
     const dMinutes = d.getMinutes() + 5;
     const minutes = dHours * 60 + dMinutes;
     const newPos = (minutes - minTime) * pixelsPerMinute;
@@ -156,8 +162,15 @@ function Clashfinder() {
 
   const stageFlexClass = "flex-1 min-w-[120px] bg-fuchsia-950 backdrop-blur-sm";
 
+  const debounced = debounce(() => {
+    calculateCurrentTimePos();
+  }, 500);
+
   return (
-    <div className={cx(gradientCSS, "w-screen h-screen overflow-auto")}>
+    <div
+      className={cx(gradientCSS, "w-screen h-screen overflow-auto")}
+      onScroll={debounced}
+    >
       <Banner
         year={year}
         setYear={setYear}
@@ -176,10 +189,7 @@ function Clashfinder() {
           <tr>
             {stages.map((stage) => (
               <td>
-                <div
-                  // onScroll={debounced}
-                  className="flex"
-                >
+                <div className="flex">
                   {/* Time column */}
                   {/* TODO, see if it's possible to get this sticky */}
 

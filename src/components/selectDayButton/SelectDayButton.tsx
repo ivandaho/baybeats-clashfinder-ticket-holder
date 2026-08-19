@@ -63,7 +63,7 @@ const SelectDayButton = (props: SelectDayButtonProps) => {
               buttonClass,
               selectedDay === day
                 ? buttonClassSelected
-                : "text-white hover:bg-fuchsia-700",
+                : "text-white hover:bg-lime-700",
             )}
           >
             {festivalData[day].date}

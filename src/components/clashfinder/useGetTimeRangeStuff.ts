@@ -59,7 +59,7 @@ const useGetTimeRangeStuff = (
   for (let minutes = minTime; minutes <= maxTime; minutes += 30) {
     const hour = Math.floor(minutes / 60);
     const displayHour = hour > 12 ? hour - 12 : hour === 0 ? 12 : hour;
-    const period = hour >= 12 ? "pm" : "am";
+    const period = hour >= 12 && hour < 24 ? "pm" : "am";
     const isHour = minutes % 60 === 0;
 
     timeMarkers = timeMarkers.concat({

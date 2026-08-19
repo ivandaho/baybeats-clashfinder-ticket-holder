@@ -67,18 +67,20 @@ const addMinutes = (timeStr: string, minutesToAdd: number) => {
 };
 
 /** returns the corresponding baybeats day based on today's date number*/
-const getTodayBaybeatsDay = (): BaybeatsDay => {
+// TODO: for future, support this dynamically
+const getTodayBaybeatsDay = (): BaybeatsDay | "not_baybeats_yet" => {
   const d = new Date().getDate();
   switch (d) {
-    case 30:
-    default:
+    case 3:
       return "day_1";
-    case 31:
+    case 4:
       return "day_2";
-    case 1:
+    case 5:
       return "day_3";
-    case 2:
+    case 6:
       return "day_4";
+    default:
+      return "not_baybeats_yet"
   }
 };
 

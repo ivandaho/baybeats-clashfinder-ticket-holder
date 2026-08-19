@@ -6,49 +6,59 @@
         "LiveWire": [
           {
             "startTime": "7.30pm",
-            "artist": "Cancer Game"
+            "artist": "Cancer Game (MO)",
+            "setDurationMins": 45
           },
           {
             "startTime": "9.00pm",
-            "artist": "HYPER SLASH"
+            "artist": "HYPER SLASH (CN)",
+            "setDurationMins": 45
           },
           {
             "startTime": "10.30pm",
-            "artist": "Bilderbuch"
+            "artist": "Bilderbuch (AT)",
+            "setDurationMins": 60
           }
         ],
         "Arena": [
           {
             "startTime": "7.15pm",
-            "artist": "Soggy Jeans"
+            "artist": "Soggy Jeans",
+            "setDurationMins": 30
           },
           {
             "startTime": "8.30pm",
-            "artist": "enec.e"
+            "artist": "enec.e",
+            "setDurationMins": 45
           },
           {
             "startTime": "10.00pm",
-            "artist": "Soft Pine"
+            "artist": "Soft Pine (TH)",
+            "setDurationMins": 60
           }
         ],
         "Chillout": [
           {
             "startTime": "6.45pm",
-            "artist": "Says It All"
+            "artist": "Says It All",
+            "setDurationMins": 30
           },
           {
             "startTime": "8.15pm",
-            "artist": "Mediocre Haircut Crew"
+            "artist": "Mediocre Haircut Crew",
+            "setDurationMins": 30
           }
         ],
         "Annexe": [
           {
             "startTime": "8.00pm",
-            "artist": "MUFF"
+            "artist": "MUFF",
+            "setDurationMins": 30
           },
           {
             "startTime": "9.15pm",
-            "artist": "Tramhaus"
+            "artist": "Tramhaus (NL)",
+            "setDurationMins": 60
           }
         ]
       }
@@ -59,67 +69,81 @@
         "LiveWire": [
           {
             "startTime": "7.00pm",
-            "artist": "FUSE"
+            "artist": "FUSE",
+            "setDurationMins": 45
           },
           {
             "startTime": "8.45pm",
-            "artist": "Perunggu"
+            "artist": "Perunggu (ID)",
+            "setDurationMins": 45
           },
           {
             "startTime": "10.30pm",
-            "artist": "Coaltar of the Deepers"
+            "artist": "Coaltar of the Deepers (JP)",
+            "setDurationMins": 60
           }
         ],
         "Arena": [
           {
             "startTime": "6.45pm",
-            "artist": "Hidemen"
+            "artist": "Hidemen",
+            "setDurationMins": 30
           },
           {
             "startTime": "8.15pm",
-            "artist": "Stopgap"
+            "artist": "Stopgap",
+            "setDurationMins": 45
           },
           {
             "startTime": "10.00pm",
-            "artist": "LEPYUTIN"
+            "artist": "LEPYUTIN (TH)",
+            "setDurationMins": 45
           }
         ],
         "Chillout": [
           {
             "startTime": "6.00pm",
-            "artist": "Kin Leonn"
+            "artist": "Kin Leonn",
+            "setDurationMins": 30
           },
           {
             "startTime": "8.00pm",
-            "artist": "HOA"
+            "artist": "HOA (KR)",
+            "setDurationMins": 30
           }
         ],
         "Powerhouse": [
           {
             "startTime": "7.30pm",
-            "artist": "the cabs"
+            "artist": "the cabs (JP)",
+            "setDurationMins": 45
           },
           {
             "startTime": "9.15pm",
-            "artist": "The Observatory"
+            "artist": "The Observatory",
+            "setDurationMins": 45
           },
           {
             "startTime": "11.00pm",
-            "artist": "Naedr & the Midheaven String Collective"
+            "artist": "Naedr & the Midheaven String Collective",
+            "setDurationMins": 60
           }
         ],
         "Annexe": [
           {
             "startTime": "7.15pm",
-            "artist": "Pretty Girls Cry"
+            "artist": "Pretty Girls Cry",
+            "setDurationMins": 30
           },
           {
             "startTime": "8.45pm",
-            "artist": "Yangbans"
+            "artist": "Yangbans (KR)",
+            "setDurationMins": 45
           },
           {
             "startTime": "10.30pm",
-            "artist": "TOOLS OF THE TRADE"
+            "artist": "TOOLS OF THE TRADE (MY)",
+            "setDurationMins": 60
           }
         ]
       }
@@ -130,67 +154,81 @@
         "Arena": [
           {
             "startTime": "7.15pm",
-            "artist": "Mediocre Haircut Crew"
+            "artist": "Mediocre Haircut Crew",
+            "setDurationMins": 30
           },
           {
             "startTime": "9.00pm",
-            "artist": "Bugs of Phonon"
+            "artist": "Bugs of Phonon (TW)",
+            "setDurationMins": 45
           },
           {
             "startTime": "10.45pm",
-            "artist": "HOA"
+            "artist": "HOA (KR)",
+            "setDurationMins": 60
           }
         ],
         "Powerhouse": [
           {
             "startTime": "6.45pm",
-            "artist": "Kin Leonn x pureblue Ensemble"
+            "artist": "Kin Leonn x pureblue Ensemble",
+            "setDurationMins": 45
           },
           {
             "startTime": "8.30pm",
-            "artist": "DAVID BORING"
+            "artist": "DAVID BORING (HK)",
+            "setDurationMins": 45
           },
           {
             "startTime": "10.15pm",
-            "artist": "Disco Hue"
+            "artist": "Disco Hue",
+            "setDurationMins": 60
           }
         ],
         "Annexe": [
           {
             "startTime": "5.45pm",
-            "artist": "Jhen Yue Tang"
+            "artist": "Jhen Yue Tang (TW)",
+            "setDurationMins": 45
           },
           {
             "startTime": "7.30pm",
-            "artist": "T-REX"
+            "artist": "T-REX",
+            "setDurationMins": 45
           },
           {
             "startTime": "9.15pm",
-            "artist": "Rắn Cạp Đuôi Collective"
+            "artist": "Rắn Cạp Đuôi Collective (VN)",
+            "setDurationMins": 60
           }
         ],
         "Chillout": [
           {
             "startTime": "6.00pm",
-            "artist": "VYLT"
+            "artist": "VYLT",
+            "setDurationMins": 30
           },
           {
             "startTime": "8.00pm",
-            "artist": "Srirajah Rockers"
+            "artist": "Srirajah Rockers (TH)",
+            "setDurationMins": 30
           }
         ],
         "LiveWire": [
           {
             "startTime": "6.45pm",
-            "artist": "Sweetass"
+            "artist": "Sweetass (MY)",
+            "setDurationMins": 45
           },
           {
             "startTime": "8.30pm",
-            "artist": "Typecast"
+            "artist": "Typecast (PH)",
+            "setDurationMins": 45
           },
           {
             "startTime": "10.15pm",
-            "artist": "The SIGIT"
+            "artist": "The SIGIT (ID)",
+            "setDurationMins": 60
           }
         ]
       }
@@ -201,67 +239,81 @@
         "LiveWire": [
           {
             "startTime": "6.45pm",
-            "artist": "Bhayanak Maut"
+            "artist": "Bhayanak Maut (IN)",
+            "setDurationMins": 45
           },
           {
             "startTime": "8.30pm",
-            "artist": "Dabda"
+            "artist": "Dabda (KR)",
+            "setDurationMins": 45
           },
           {
             "startTime": "10.15pm",
-            "artist": "Tiramisu Feat. The Hype Goblins and a Special Guest"
+            "artist": "Tiramisu Feat. The Hype Goblins and a Special Guest",
+            "setDurationMins": 60
           }
         ],
         "Powerhouse": [
           {
             "startTime": "5.45pm",
-            "artist": "Srirajah Rockers"
+            "artist": "Srirajah Rockers (TH)",
+            "setDurationMins": 45
           },
           {
             "startTime": "7.30pm",
-            "artist": "Subsonic Eye"
+            "artist": "Subsonic Eye",
+            "setDurationMins": 45
           },
           {
             "startTime": "9.15pm",
-            "artist": "Boris"
+            "artist": "Boris (JP)",
+            "setDurationMins": 90
           }
         ],
         "Annexe": [
           {
             "startTime": "7.00pm",
-            "artist": "BULGOGI DISCO"
+            "artist": "BULGOGI DISCO (KR)",
+            "setDurationMins": 45
           },
           {
             "startTime": "8.45pm",
-            "artist": "Spider"
+            "artist": "Spider",
+            "setDurationMins": 45
           },
           {
             "startTime": "10.30pm",
-            "artist": "Kias"
+            "artist": "Kias (MY)",
+            "setDurationMins": 60
           }
         ],
         "Arena": [
           {
             "startTime": "7.15pm",
-            "artist": "Gabba"
+            "artist": "Gabba (PH)",
+            "setDurationMins": 45
           },
           {
             "startTime": "9.00pm",
-            "artist": "Solitude Is Bliss"
+            "artist": "Solitude Is Bliss (TH)",
+            "setDurationMins": 45
           },
           {
             "startTime": "10.45pm",
-            "artist": "Treaks"
+            "artist": "Treaks (FR)",
+            "setDurationMins": 60
           }
         ],
         "Chillout": [
           {
             "startTime": "6.00pm",
-            "artist": "T.HIRST"
+            "artist": "T.HIRST",
+            "setDurationMins": 30
           },
           {
             "startTime": "8.00pm",
-            "artist": "T.HIRST"
+            "artist": "T.HIRST",
+            "setDurationMins": 30
           }
         ]
       }

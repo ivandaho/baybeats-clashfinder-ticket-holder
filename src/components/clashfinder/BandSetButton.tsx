@@ -40,11 +40,12 @@ const BandSetButton = ({
   setRefreshWorkaround,
   setBandSetCount,
 }: BandSetButtonProps) => {
-  const { startTime, artist, note } = baybeatsSet;
-  const endTime = addMinutes(startTime, stage === "Concourse" ? 30 : 40);
+  const { startTime, artist, note, setDurationMins } = baybeatsSet;
+  const minsToAdd = setDurationMins ?? (stage === "Concourse" ? 30 : 45); // default to 30/45 mins set times
+  const endTime = addMinutes(startTime, minsToAdd);
   const startMinutes = timeToMinutes(startTime);
   const topPosition = (startMinutes - minTime) * pixelsPerMinute;
-  const height = (stage === "Concourse" ? 30 : 40) * pixelsPerMinute; // 45 min set
+  const height = minsToAdd * pixelsPerMinute;
 
   const inputRef = useRef<HTMLInputElement>(null);
   const [tixCount, setTixCount] = useState<number>(0);
