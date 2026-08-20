@@ -1,4 +1,8 @@
-import type { BaybeatsDay, BaybeatsStage } from "../types/types";
+import type {
+  BaybeatsDay,
+  BaybeatsStage,
+  UniqTixCountFormat,
+} from "../types/types";
 
 const timeToMinutes = (time: string) => {
   const match = time.match(/(\d+)(?:\.(\d+))?(am|pm)/);
@@ -104,6 +108,10 @@ function debounce<T extends (...args: any[]) => any>(
   };
 }
 
+const getIs2025Tix = (d: UniqTixCountFormat) => {
+  return d.transactionNumber.substring(0, 4) === "2025";
+};
+
 /** moves the entire timeline including markers */
 const TIMELINE_OFFSET_PIXELS = 0;
 /** adds a bit of spacing at the bottom */
@@ -118,4 +126,5 @@ export {
   needTixBorderClassName,
   TIMELINE_OFFSET_PIXELS,
   ADDED_TIMELINE_HEIGHT,
+  getIs2025Tix,
 };

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { H4 } from "./H4";
-const VERSION = "2.1.3";
+const VERSION = "2.2.0";
 
 type BannerProps = {
   bandSetCount: number | null;
@@ -15,7 +15,6 @@ const Banner = ({
   promptDelete,
   tixCount,
   year,
-  setYear,
 }: BannerProps) => {
   const [counter, setCounter] = useState(0);
   const onClick = () => {
@@ -24,13 +23,12 @@ const Banner = ({
 
   useEffect(() => {
     if (counter >= 10) {
-      const newYear = year === "2026" ? "2025" : "2026";
-      setYear(newYear);
-      alert(`version: ${VERSION}. Baybeats year is set to ${newYear}`);
+      // const newYear = year === "2026" ? "2025" : "2026";
+      // setYear(newYear);
+      alert(`version: ${VERSION}`);
       setCounter(0);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [counter, setYear]);
+  }, [counter]);
 
   return (
     <div className="pl-1">
@@ -39,11 +37,8 @@ const Banner = ({
       </h1>
       <H4>
         Ticket management: Click <strong>any</strong> band slot to start storing
-        tickets for <strong>any</strong> set, only on this device. You may
-        select tickets for multiple sets at once.
-      </H4>
-      <H4>
-        <strong>now supporting multiple pdf downloads.</strong>
+        tickets for <strong>any</strong> set, only on this device.{" "}
+        <strong>You may select tickets for multiple sets at once.</strong>
       </H4>
       <H4>Everything runs locally, nothing is uploaded.</H4>
       <H4>Tickets required only for performances at Powerhouse and Annexe.</H4>
@@ -54,6 +49,9 @@ const Banner = ({
       <H4>
         After storing tickets, click the slot to access your ticket(s) for that
         set.
+      </H4>
+      <H4 className="*:p-1">
+        <small className="text-right">v{VERSION}</small>
         <a
           href="https://www.esplanade.com/baybeats"
           className="rounded-md font-semibold text-xs text-white content-center px-1"

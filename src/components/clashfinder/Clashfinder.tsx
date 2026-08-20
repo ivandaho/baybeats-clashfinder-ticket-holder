@@ -16,7 +16,11 @@ import {
   migrateLegacyData,
   removeAllPDFData,
 } from "../../utils/pdf";
-import { debounce, getTodayBaybeatsDay } from "../../utils/clashfinder";
+import {
+  debounce,
+  getTodayBaybeatsDay,
+  getIs2025Tix,
+} from "../../utils/clashfinder";
 import { CurrentTime } from "./CurrentTime";
 import { Banner } from "./Banner";
 import { SelectDayButton } from "../selectDayButton/SelectDayButton";
@@ -97,13 +101,22 @@ function Clashfinder() {
           continue;
         }
         try {
-          setCount++;
           const data: UniqTixCountFormat[] = JSON.parse(
             localStorage.getItem(key || "") || "",
           );
-          data.forEach((d) => {
-            tixCounter += d.tixCount;
+          let is2025Tix = false;
+          data.forEach((d, i) => {
+            if (i === 0) {
+              // check for first tix
+              is2025Tix = !getIs2025Tix(d);
+            }
+            if (is2025Tix) {
+              tixCounter += d.tixCount;
+            }
           });
+          if (is2025Tix) {
+            setCount++;
+          }
           // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (e) {
           // ignore
