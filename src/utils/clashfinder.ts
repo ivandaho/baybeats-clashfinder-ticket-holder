@@ -116,6 +116,8 @@ const getIs2025Tix = (d: UniqTixCountFormat) => {
 const TIMELINE_OFFSET_PIXELS = 0;
 /** adds a bit of spacing at the bottom */
 const ADDED_TIMELINE_HEIGHT = 48;
+const GRADIENT_BG_CSS =
+  "bg-gradient-to-br from-fuchsia-900 via-fuchsia-1000 to-fuchsia-1000";
 
 export {
   addMinutes,
@@ -127,4 +129,6 @@ export {
   TIMELINE_OFFSET_PIXELS,
   ADDED_TIMELINE_HEIGHT,
   getIs2025Tix,
+  GRADIENT_BG_CSS,
+  
 };

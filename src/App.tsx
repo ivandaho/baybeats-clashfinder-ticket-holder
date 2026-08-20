@@ -1,5 +1,7 @@
 import "./App.css";
 import Clashfinder from "./components/clashfinder/Clashfinder";
+import { GRADIENT_BG_CSS } from "./utils/clashfinder";
+import cx from "./utils/cx";
 
 function App() {
   // useEffect(() => {
@@ -10,7 +12,16 @@ function App() {
   //     }
   //   }
   // }, []);
-  return <Clashfinder />;
+  return (
+    <div
+      className={cx(
+        "w-full bg-lime-500/20 w-screen overflow-y-auto flex justify-center",
+        GRADIENT_BG_CSS,
+      )}
+    >
+      <Clashfinder />
+    </div>
+  );
 }
 
 export default App;

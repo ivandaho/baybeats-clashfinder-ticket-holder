@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { H4 } from "./H4";
-const VERSION = "2.2.1";
+const VERSION = "2.3.0";
 
 type BannerProps = {
   bandSetCount: number | null;
@@ -32,7 +32,7 @@ const Banner = ({
 
   return (
     <div className="pl-1">
-      <h1 onClick={onClick} className="text-4xl font-bold text-white mt-4 flex">
+      <h1 onClick={onClick} className="text-4xl font-bold text-white pt-2 flex">
         Baybeats {year} Clashfinder
       </h1>
       <H4>

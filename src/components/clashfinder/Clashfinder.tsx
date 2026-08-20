@@ -20,15 +20,13 @@ import {
   debounce,
   getTodayBaybeatsDay,
   getIs2025Tix,
+  GRADIENT_BG_CSS,
 } from "../../utils/clashfinder";
 import { CurrentTime } from "./CurrentTime";
 import { Banner } from "./Banner";
 import { SelectDayButton } from "../selectDayButton/SelectDayButton";
 import { TableHeader } from "../tableHeader/TableHeader";
 import cx from "../../utils/cx";
-
-const gradientCSS =
-  "bg-gradient-to-br from-fuchsia-900 via-fuchsia-1000 to-fuchsia-1000";
 
 function Clashfinder() {
   const todayBaybeatsDay = getTodayBaybeatsDay();
@@ -164,7 +162,7 @@ function Clashfinder() {
     return (
       <div
         className={cx(
-          gradientCSS,
+          GRADIENT_BG_CSS,
           "w-screen overflow-scroll h-screen text-white p-4",
         )}
       >
@@ -181,7 +179,7 @@ function Clashfinder() {
 
   return (
     <div
-      className={cx(gradientCSS, "w-screen h-screen overflow-auto")}
+      className={"container lg:px-24 xl:px-32 2xl:px-48 h-screen"}
       onScroll={debounced}
     >
       <Banner
