@@ -201,7 +201,7 @@ function Clashfinder() {
         <tbody>
           <tr>
             {stages.map((stage) => (
-              <td>
+              <td key={stage}>
                 <div className="flex">
                   {/* Time column */}
                   {/* TODO, see if it's possible to get this sticky */}
