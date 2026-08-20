@@ -6,7 +6,12 @@ import {
   type Dispatch,
   type SetStateAction,
 } from "react";
-import { addMinutes, isNeedTix, timeToMinutes } from "../../utils/clashfinder";
+import {
+  addMinutes,
+  isNeedTix,
+  TIMELINE_OFFSET_PIXELS,
+  timeToMinutes,
+} from "../../utils/clashfinder";
 import {
   getArtistSetTixCount,
   getPDFById,
@@ -44,7 +49,8 @@ const BandSetButton = ({
   const minsToAdd = setDurationMins ?? (stage === "Concourse" ? 30 : 45); // default to 30/45 mins set times
   const endTime = addMinutes(startTime, minsToAdd);
   const startMinutes = timeToMinutes(startTime);
-  const topPosition = (startMinutes - minTime) * pixelsPerMinute;
+  const topPosition =
+    (startMinutes - minTime) * pixelsPerMinute + TIMELINE_OFFSET_PIXELS;
   const height = minsToAdd * pixelsPerMinute;
 
   const inputRef = useRef<HTMLInputElement>(null);

@@ -104,6 +104,11 @@ function debounce<T extends (...args: any[]) => any>(
   };
 }
 
+/** moves the entire timeline including markers */
+const TIMELINE_OFFSET_PIXELS = 0;
+/** adds a bit of spacing at the bottom */
+const ADDED_TIMELINE_HEIGHT = 48;
+
 export {
   addMinutes,
   timeToMinutes,
@@ -111,4 +116,6 @@ export {
   getTodayBaybeatsDay,
   debounce,
   needTixBorderClassName,
+  TIMELINE_OFFSET_PIXELS,
+  ADDED_TIMELINE_HEIGHT,
 };

@@ -5,7 +5,11 @@ import type {
   FestivalDay,
   TimeMarker,
 } from "../../types/types";
-import { timeToMinutes } from "../../utils/clashfinder";
+import {
+  ADDED_TIMELINE_HEIGHT,
+  TIMELINE_OFFSET_PIXELS,
+  timeToMinutes,
+} from "../../utils/clashfinder";
 
 const pixelsPerMinute = 2; // Scale factor
 
@@ -51,7 +55,10 @@ const useGetTimeRangeStuff = (
   maxTime = Math.ceil(maxTime / 60) * 60;
 
   const totalMinutes = maxTime - minTime;
-  const timelineHeight = totalMinutes * pixelsPerMinute;
+  const timelineHeight =
+    totalMinutes * pixelsPerMinute +
+    TIMELINE_OFFSET_PIXELS * 2 + // for top and bottom?
+    ADDED_TIMELINE_HEIGHT;
 
   // Generate hour markers
   let timeMarkers: TimeMarker[] = [];
@@ -67,7 +74,7 @@ const useGetTimeRangeStuff = (
       displayHour,
       period,
       isHour,
-      position: (minutes - minTime) * pixelsPerMinute,
+      position: (minutes - minTime) * pixelsPerMinute + TIMELINE_OFFSET_PIXELS,
     });
   }
 

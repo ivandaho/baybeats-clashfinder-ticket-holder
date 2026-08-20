@@ -160,7 +160,7 @@ function Clashfinder() {
     );
   }
 
-  const stageFlexClass = "flex-1 min-w-[120px] bg-fuchsia-950 backdrop-blur-sm";
+  const stageFlexClass = "flex-1 min-w-[120px] bg-fuchsia-950/80";
 
   const debounced = debounce(() => {
     calculateCurrentTimePos();
@@ -197,14 +197,14 @@ function Clashfinder() {
                   <div
                     key={stage}
                     className={stageFlexClass}
-                    style={{ height: `${timelineHeight + 134}px` }} // huh?
+                    style={{ height: `${timelineHeight}px` }} // huh?
                   >
                     {showCurrentTime && <CurrentTime pos={currentTimePos} />}
 
                     <div
                       className="relative border-l-2 border-white/20 l-[-1px]"
                       style={{
-                        height: `${timelineHeight + 75}px`,
+                        height: `${timelineHeight}px`,
                       }}
                     >
                       {/* Hour grid lines */}
