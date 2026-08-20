@@ -18,6 +18,7 @@ const dbPromise = await openDB("pdf-files", 1, {
 
 const textBeforeBandName = "Esplanade Presents | Baybeats  ";
 const textAfterBandName = "  The Esplanade Co Ltd";
+const inConjunctionText = "presented in conjunction with Carnival Fever";
 const venueAnnexe = "Annexe (Esplanade Annexe Studio)";
 const venueWaterfront =
   "Powerhouse2 (Singtel Waterfront  Theatre at Esplanade)";
@@ -27,6 +28,10 @@ const bandSetDateTimeRegexp = new RegExp(
 );
 
 const transNumRegExp = new RegExp(/(\d{8}-\d{6})/g);
+
+const bandNameFixes: { [s: string]: string } = {
+  "R ắ n C ạ p   Đ uôi Collective": "Rắn Cạp Đuôi Collective",
+};
 
 const processPdfData = (fullText: string, numPages: number): SetMetadata => {
   return {
@@ -39,11 +44,12 @@ const processPdfData = (fullText: string, numPages: number): SetMetadata => {
 };
 
 const getBandName = (fullText: string): string => {
+  const fixedFullText = fullText.replace(inConjunctionText, "");
   const startIndex =
-    fullText.indexOf(textBeforeBandName) + textBeforeBandName.length;
-  const endIndex = fullText.indexOf(textAfterBandName);
-  const bandName = fullText.substring(startIndex, endIndex);
-  return bandName;
+    fixedFullText.indexOf(textBeforeBandName) + textBeforeBandName.length;
+  const endIndex = fixedFullText.indexOf(textAfterBandName);
+  const bandName = fixedFullText.substring(startIndex, endIndex);
+  return bandNameFixes[bandName] || bandName;
 };
 
 const getSetDateTime = (fullText: string): Date => {
@@ -171,7 +177,7 @@ const readFilesAsyncish = async (files: FileList) => {
     const obj: FileObjectMap2 = {};
     let index = 0;
     for (const file of files) {
-      let reader = new FileReader();
+      const reader = new FileReader();
 
       reader.onload = async () => {
         console.log("reader.result: ", reader.result);

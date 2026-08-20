@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { H4 } from "./H4";
-const VERSION = "2.3.0";
+const VERSION = "2.3.1";
 
 type BannerProps = {
   bandSetCount: number | null;
