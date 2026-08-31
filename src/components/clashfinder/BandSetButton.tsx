@@ -15,8 +15,10 @@ import {
 import {
   getArtistSetTixCount,
   getPDFById,
+  postTixToServer,
   readFilesAsyncish,
   saveTixPerBand,
+  splitTixPerBand,
 } from "../../utils/pdf";
 import type { BaybeatsSet, BaybeatsStage } from "../../types/types";
 import { TixBadge } from "./TixBadge";
@@ -62,10 +64,13 @@ const BandSetButton = ({
     if (!files) return;
     // const result = await consolidatePDFs(files);
     const result = await readFilesAsyncish(files);
-    const re = await saveTixPerBand(result);
-    if (re) {
-      setRefreshWorkaround(new Date().getTime());
-    }
+    const splitTix = await splitTixPerBand(result);
+    const postres = await postTixToServer(splitTix);
+    console.log('postres: ', postres)
+    // const re = await saveTixPerBand(result);
+    // if (re) {
+    //   setRefreshWorkaround(new Date().getTime());
+    // }
   };
 
   useEffect(() => {

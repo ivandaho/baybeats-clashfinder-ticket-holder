@@ -289,6 +289,85 @@ const saveTixPerBand = async (obj: FileObjectMap2) => {
   return true;
 };
 
+const UPLOAD_URL = "/upload";
+
+// Splits a multi-page ticket PDF into one PDF per individual ticket.
+// Each ticket in the source PDF spans 2 pages (front + back), so pages are
+// grouped in pairs and each pair is emitted as its own single-ticket File.
+const splitPdfByTix = async (
+  pdfBytes: ArrayBuffer,
+  filename: string,
+): Promise<File[]> => {
+  const pdf = await PDFDocument.load(pdfBytes);
+  const pageIndices = pdf.getPageIndices();
+  const tixFiles: File[] = [];
+
+  for (let i = 0; i < pageIndices.length; i += 2) {
+    const tixDoc = await PDFDocument.create();
+    const pages = await tixDoc.copyPages(pdf, pageIndices.slice(i, i + 2));
+    pages.forEach((page) => tixDoc.addPage(page));
+    const bytes = await tixDoc.save();
+    tixFiles.push(
+      new File([bytes as any], `${filename}-tix-${i / 2 + 1}.pdf`, {
+        type: "application/pdf",
+      }),
+    );
+  }
+
+  return tixFiles;
+};
+
+type TixUpload = { bandName: string; file: File };
+
+// Splits every uploaded PDF in the map into individual tickets, one entry per
+// ticket with its band name. Each file maps to an Express.Multer.File on the
+// server once sent via FormData.
+const splitTixPerBand = async (obj: FileObjectMap2): Promise<TixUpload[]> => {
+  const items = Object.entries(obj);
+  const uploads: TixUpload[] = [];
+
+  for (const [bandName, tixInfos] of items) {
+    // de-duplicate the uploaded batch by transaction number first
+    const uniqueTixInfosInUpload = Array.from(
+      tixInfos
+        .reduce((map, item) => {
+          map.set(item.setMetadata.transactionNumber, item);
+          return map;
+        }, new Map())
+        .values(),
+    );
+
+    const cleanBandName = getCleanBandName(bandName);
+    for (const { tix } of uniqueTixInfosInUpload) {
+      if (!tix) continue;
+      // split this PDF into one File per individual ticket
+      const singleTixFiles = await splitPdfByTix(
+        await tix.arrayBuffer(),
+        cleanBandName,
+      );
+      singleTixFiles.forEach((file) => uploads.push({ bandName, file }));
+    }
+  }
+
+  return uploads;
+};
+
+const postTixToServer = async (uploads: TixUpload[]) => {
+  const formData = new FormData();
+  uploads.forEach(({ bandName, file }) => {
+    formData.append("file", file);
+    formData.append("bandName", bandName);
+  });
+  const response = await fetch(UPLOAD_URL, {
+    method: "POST",
+    body: formData,
+  });
+  if (!response.ok) {
+    throw new Error(`upload failed: ${response.status} ${response.statusText}`);
+  }
+  return uploads;
+};
+
 const migrateLegacyData = async () => {
   const allDbKeys = await dbPromise.getAllKeys("pdf-files");
   for (const key of allDbKeys) {
@@ -334,6 +413,8 @@ export {
   removeArtistTixInfoFromLS,
   saveTixPerBand,
   storeTicketPdf,
+  splitTixPerBand,
   getArtistTixInfoFromLS,
   migrateLegacyData,
+  postTixToServer,
 };

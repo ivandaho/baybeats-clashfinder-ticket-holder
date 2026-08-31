@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { H4 } from "./H4";
 const VERSION = "2.3.1";
+const AUTH_URL = "/invite/testivan";
 
 type BannerProps = {
   bandSetCount: number | null;
@@ -17,8 +18,22 @@ const Banner = ({
   year,
 }: BannerProps) => {
   const [counter, setCounter] = useState(0);
+  const [authStatus, setAuthStatus] = useState<string>("");
   const onClick = () => {
     setCounter(counter + 1);
+  };
+
+  const onAuth = async () => {
+    try {
+      const response = await fetch(AUTH_URL, { credentials: "include" });
+      if (response.ok) {
+        setAuthStatus("authenticated");
+      } else {
+        setAuthStatus(`failed (${response.status})`);
+      }
+    } catch (e) {
+      setAuthStatus("error");
+    }
   };
 
   useEffect(() => {
@@ -64,6 +79,12 @@ const Banner = ({
         >
           Code
         </a>
+        <button
+          onClick={onAuth}
+          className="rounded-md font-semibold text-xs text-white content-center px-1 bg-white/10 hover:bg-white/20"
+        >
+          Auth {authStatus && `- ${authStatus}`}
+        </button>
       </H4>
       {tixCount && tixCount > 0 ? (
         <H4
