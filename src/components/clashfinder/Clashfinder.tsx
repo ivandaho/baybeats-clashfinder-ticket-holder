@@ -27,6 +27,7 @@ import { Banner } from "./Banner";
 import { SelectDayButton } from "../selectDayButton/SelectDayButton";
 import { TableHeader } from "../tableHeader/TableHeader";
 import cx from "../../utils/cx";
+import { removeAllImageData } from "../../utils/img";
 
 function Clashfinder() {
   const todayBaybeatsDay = getTodayBaybeatsDay();
@@ -135,12 +136,15 @@ function Clashfinder() {
       'type "DELETE" and submit to delete all data (no undo!)',
     );
     if (d === "DELETE") {
-      const result = await removeAllPDFData();
-      if (result) {
+      const results = await Promise.all([removeAllPDFData(), removeAllImageData()]);
+      if (results.every((r) => r === true)) {
         localStorage.clear();
         setRefreshWorkaround(new Date().getTime());
         setBandSetCount(0);
         window.alert("data deleted");
+      } else {
+        console.log('results: ', results)
+        console.log('some problem')
       }
     }
   };

@@ -13,11 +13,18 @@ import {
   timeToMinutes,
 } from "../../utils/clashfinder";
 import {
-  getArtistSetTixCount,
   getPDFById,
+  getArtistSetTixCount,
   readFilesAsyncish,
   saveTixPerBand,
 } from "../../utils/pdf";
+import {
+  getImageBlob,
+  getImageTixCount,
+  storeTicketImage,
+  updateImageTixCountLSForArtist,
+  getImageTixInfoFromLS,
+} from "../../utils/img";
 import type { BaybeatsSet, BaybeatsStage } from "../../types/types";
 import { TixBadge } from "./TixBadge";
 import cx from "../../utils/cx";
@@ -60,23 +67,57 @@ const BandSetButton = ({
   const handleFileChange = async (event: ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
     if (!files) return;
-    // const result = await consolidatePDFs(files);
-    const result = await readFilesAsyncish(files);
-    const re = await saveTixPerBand(result);
-    if (re) {
+
+    let hasNewImage = false;
+    let hasNewPdf = false;
+
+    for (const file of Array.from(files)) {
+      if (file.type.startsWith("image/")) {
+        await storeTicketImage(file, artist, startTime);
+        const existingImageTix = getImageTixInfoFromLS(artist, startTime);
+        const newImageTix = [
+          ...existingImageTix,
+          { transactionNumber: file.name, tixCount: 1 },
+        ];
+        updateImageTixCountLSForArtist(artist, startTime, newImageTix);
+        hasNewImage = true;
+      } else if (file.type === "application/pdf") {
+        hasNewPdf = true;
+      }
+    }
+
+    if (hasNewPdf) {
+      const pdfFiles = Array.from(files).filter(
+        (f) => f.type === "application/pdf",
+      );
+      const dataTransfer = new DataTransfer();
+      pdfFiles.forEach((f) => dataTransfer.items.add(f));
+      const result = await readFilesAsyncish(dataTransfer.files);
+      await saveTixPerBand(result);
+    }
+
+    if (hasNewImage || hasNewPdf) {
+      console.log("triggered refresh workaround");
       setRefreshWorkaround(new Date().getTime());
     }
   };
 
   useEffect(() => {
     const initFn = async () => {
-      const pdfBlobUrl = await getPDFById(artist);
-      const url = pdfBlobUrl ? URL.createObjectURL(pdfBlobUrl) : "#";
-      setTicketBlobLink(url);
-      setTixCount(getArtistSetTixCount(artist));
+      const imageBlob = await getImageBlob(artist, startTime);
+      if (imageBlob) {
+        const url = URL.createObjectURL(imageBlob);
+        setTicketBlobLink(url);
+        setTixCount(getImageTixCount(artist, startTime));
+      } else {
+        const pdfBlobUrl = await getPDFById(artist);
+        const url = pdfBlobUrl ? URL.createObjectURL(pdfBlobUrl) : "#";
+        setTicketBlobLink(url);
+        setTixCount(getArtistSetTixCount(artist));
+      }
     };
     initFn();
-  }, [artist, refreshWorkaround]);
+  }, [artist, refreshWorkaround, startTime]);
 
   const needTix = isNeedTix(stage);
 
@@ -130,7 +171,7 @@ const BandSetButton = ({
         ref={inputRef}
         type="file"
         multiple
-        accept=".pdf"
+        accept=".pdf,.png,.jpg,.jpeg"
         onChange={handleFileChange}
       />
     </>

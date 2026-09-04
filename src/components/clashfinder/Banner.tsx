@@ -35,10 +35,18 @@ const Banner = ({
       <h1 onClick={onClick} className="text-4xl font-bold text-white pt-2 flex">
         Baybeats {year} Clashfinder
       </h1>
+      <H4>Ticket management</H4>
       <H4>
-        Ticket management: Click <strong>any</strong> band slot to start storing
+        <strong>PDF:</strong> Click <strong>any</strong> band slot to upload PDF
         tickets for <strong>any</strong> set, only on this device.{" "}
-        <strong>You may select tickets for multiple sets at once.</strong>
+        <strong>You may select tickets for multiple sets at once.</strong>{" "}
+        Either upload the original printed PDF ticket or the page(s) with the
+        set info and barcode.
+      </H4>
+      <H4>
+        <strong>Images:</strong> Click a <strong>specific</strong> band slot to
+        store your <strong>single</strong> ticket for the{" "}
+        <strong>specific</strong> set, only on this device.
       </H4>
       <H4>Everything runs locally, nothing is uploaded.</H4>
       <H4>Tickets required only for performances at Powerhouse and Annexe.</H4>

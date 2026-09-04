@@ -72,7 +72,7 @@ const getStageLocation = (fullText: string): BaybeatsStage => {
 };
 
 const getTixCount = (numPages: number): number => {
-  return Math.floor(numPages / 2);
+  return Math.max(1, Math.floor(numPages / 2));
 };
 
 // returns the transaction number for the pdf file ticket
@@ -130,9 +130,13 @@ const getArtistSetTixCount = (artist: string): number => {
   let tixCounter = 0;
   let data: UniqTixCountFormat[] = [];
   try {
-    data = JSON.parse(localStorage.getItem(getCleanBandName(artist)) || "");
+    const lsData = localStorage.getItem(getCleanBandName(artist)) || "";
+    if (lsData) {
+      data = JSON.parse(lsData);
+    }
   } catch (e) {
     // invalid data
+    console.warn(`error getting ${artist} info: `, e);
   }
   data.forEach((d) => {
     tixCounter += d.tixCount;
